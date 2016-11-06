@@ -22,18 +22,88 @@ public class LevenshteinDistance extends CalculadorDeDistanciasEntreStrings {
     /**
      * Retorna uma instancia unica de LevenshteinDistance
      */  
-    private static LevenshteinDistance getInstance(int limite){
+    public static LevenshteinDistance getInstance(int limite){
     	if(instancia == null)
     		instancia = new LevenshteinDistance(limite);
     	
     	return instancia;
     }
-
+    
+    /**
+     * retorna limite
+     */
+    public int getLimite() {
+        return limite;
+    }
+ 
+    
+    
+    
+    
+    public int calcular(String primeiraString, String segundaString){
+        if (primeiraString.length() == 0) 
+        	return segundaString.length();
+        if (segundaString.length() == 0) 
+        	return primeiraString.length();
+ 
+        int primeiraStringLength = primeiraString.length();
+        int segundaStringLength = segundaString.length();
+ 
+        int[][] distancias = new int[primeiraStringLength + 1][segundaStringLength + 1];
+        
+        // preenche a primeira linha e coluna com o indice corrente
+        for (int i = 0; i <= primeiraStringLength; i++)
+            distancias[i][0] = i;
+        for (int i = 0; i <= segundaStringLength; i++)
+            distancias[0][i] = i;
+ 
+        // a partir da posicao [2,2] comeca o loop
+        for (int i = 1; i <= primeiraStringLength; i++)
+        {
+            for (int j = 1; j <= segundaStringLength; j++)
+            {
+            	// variável que incrementa 1 ao custo caso os caracteres sejam diferentes
+            	int letraIgual;
+            	if (primeiraString.charAt(i - 1) == segundaString.charAt(j - 1)) {
+            		letraIgual = 0;
+            	}
+            	else {
+            		letraIgual = 1;
+            	}
+            	
+            	// insere o menor 
+                distancias[i][j] = Math.min(Math.min(distancias[i - 1][j] + 1, distancias[i][j - 1] + 1), distancias[i - 1][j - 1] + letraIgual);
+            }
+        }
+        
+        //o ultimo elemento da matriz eh a distancia minima
+        return distancias[primeiraStringLength][segundaStringLength];
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     /**
      * Encontra a distancia de Levenshtein entre duas strings
      * 
      * @return distancia entre as duas Strings, ou -1 caso alguma string seja menor que o limite
      */
+    
+/*
     public int calcular(String primeiraString, String segundaString) {
         if (limite > 0) {
             return comparacaoLimitada(primeiraString, segundaString, limite);
@@ -42,24 +112,20 @@ public class LevenshteinDistance extends CalculadorDeDistanciasEntreStrings {
         }
     }
 
-    /**
-     * retorna limite
-     */
-    public int getLimite() {
-        return limite;
-    }
+*/
 
     /**
      * Calcula distancia de Levenshtein se um limite foi estabelecido (se é maior que 0)
      */
+/*    
     private static int comparacaoLimitada(String primeiraString, String segundaString, int limite) {
         if (primeiraString == null || segundaString == null) {
             throw new IllegalArgumentException("Palavras não podem ser nulas");
         }
         
-        int tamanhoDaPrimeiraString = primeiraString.length(); // length of left
-        int tamanhoDaSegundaString = segundaString.length(); // length of right
-
+        int tamanhoDaPrimeiraString = primeiraString.length(); 
+        int tamanhoDaSegundaString = segundaString.length(); 
+        
         // se o tamanho das strings for menor ou igual ao limite, retorna -1
         if((tamanhoDaPrimeiraString <= limite) && (tamanhoDaSegundaString <= limite)){
         	return -1;
@@ -80,73 +146,71 @@ public class LevenshteinDistance extends CalculadorDeDistanciasEntreStrings {
             tamanhoDaSegundaString = segundaString.length();
         }
 
-        int[] custoDoArrayAnterior = new int[tamanhoDaPrimeiraString + 1]; 
-        int[] custoDoArray = new int[tamanhoDaPrimeiraString + 1];
+        int[] custosAntigo = new int[tamanhoDaPrimeiraString + 1]; 
+        int[] custos = new int[tamanhoDaPrimeiraString + 1];
         int[] tempArray; // para trocas entre os dois arrays
       
-
+        
         final int limiteMinimo = Math.min(tamanhoDaPrimeiraString, limite) + 1;
         
         // preenche o primeiro array com o valor crescente
         for (int i = 0; i < limiteMinimo; i++) {
-            custoDoArrayAnterior[i] = i;
+            custosAntigo[i] = i;
         }
         
-        // these fills ensure that the value above the rightmost entry of our
-        // stripe will be ignored in following loop iterations
-        // preenche as posições maiores que o limiteMinimo com infinito, para serem ignoradas
+        // preenche as posições maiores que o limite minimo com infinito, para serem ignoradas
         // no loop
-        Arrays.fill(custoDoArrayAnterior, limiteMinimo, custoDoArrayAnterior.length, Integer.MAX_VALUE);
-        Arrays.fill(custoDoArray, Integer.MAX_VALUE);
+        //         ( array      , inicio      , fim                , valor preenchido)
+        Arrays.fill(custosAntigo, limiteMinimo, custosAntigo.length, Integer.MAX_VALUE);
+        Arrays.fill(custos, Integer.MAX_VALUE);
 
-        // iterates through t
-        for (int j = 1; j <= tamanhoDaSegundaString; j++) {
-            final char jDaSegundaString = segundaString.charAt(j - 1); 
-            custoDoArray[0] = j;
+        for (int posicaoNaSegundaString = 1; posicaoNaSegundaString <= tamanhoDaSegundaString;
+        		posicaoNaSegundaString++) {
+            final char jDaSegundaString = segundaString.charAt(posicaoNaSegundaString - 1); 
+            custos[0] = posicaoNaSegundaString;
+            
+            // marca os indices limites, sendo no máximo o tamanho do array
+            final int min = Math.max(1, posicaoNaSegundaString - limite);
+            final int max = posicaoNaSegundaString > Integer.MAX_VALUE - limite ?
+            		tamanhoDaPrimeiraString : 
+            			Math.min(tamanhoDaPrimeiraString, posicaoNaSegundaString + limite);
 
-            // compute stripe indices, constrain to array size
-            final int min = Math.max(1, j - limite);
-            final int max = j > Integer.MAX_VALUE - limite ? tamanhoDaPrimeiraString : Math.min(
-                    tamanhoDaPrimeiraString, j + limite);
-
-            // the stripe may lead off of the table if s and t are of different
-            // sizes
             if (min > max) {
                 return -1;
             }
 
-            // ignore entry left of leftmost
+            
             if (min > 1) {
-                custoDoArray[min - 1] = Integer.MAX_VALUE;
+                custos[min - 1] = Integer.MAX_VALUE;
             }
 
             // iterates through [min, max] in s
             for (int i = min; i <= max; i++) {
                 if (primeiraString.charAt(i - 1) == jDaSegundaString) {
                     // diagonally left and up
-                    custoDoArray[i] = custoDoArrayAnterior[i - 1];
+                    custos[i] = custosAntigo[i - 1];
                 } else {
                     // 1 + minimum of cell to the left, to the top, diagonally
                     // left and up
-                    custoDoArray[i] = 1 + Math.min(Math.min(custoDoArray[i - 1], custoDoArrayAnterior[i]), custoDoArrayAnterior[i - 1]);
+                    custos[i] = 1 + Math.min(Math.min(custos[i - 1], custosAntigo[i]), custosAntigo[i - 1]);
                 }
             }
 
             // copy current distance counts to 'previous row' distance counts
-            tempArray = custoDoArrayAnterior;
-            custoDoArrayAnterior = custoDoArray;
-            custoDoArray = tempArray;
+            tempArray = custosAntigo;
+            custosAntigo = custos;
+            custos = tempArray;
         }
 
         // if p[n] is greater than the threshold, there's no guarantee on it
         // being the correct
         // distance
-        if (custoDoArrayAnterior[tamanhoDaPrimeiraString] <= limite) {
-            return custoDoArrayAnterior[tamanhoDaPrimeiraString];
+        if (custosAntigo[tamanhoDaPrimeiraString] <= limite) {
+            return custosAntigo[tamanhoDaPrimeiraString];
         }
         return -1;
     }
-
+*/
     /**
      * <p>Find the Levenshtein distance between two Strings.</p>
      *
@@ -179,6 +243,7 @@ public class LevenshteinDistance extends CalculadorDeDistanciasEntreStrings {
      * @return result distance, or -1
      * @throws IllegalArgumentException if either String input {@code null}
      */
+/*
     private static int comparacaoIlimitada(CharSequence left, CharSequence right) {
         if (left == null || right == null) {
             throw new IllegalArgumentException("Strings must not be null");
@@ -240,5 +305,5 @@ public class LevenshteinDistance extends CalculadorDeDistanciasEntreStrings {
         // actually has the most recent cost counts
         return p[n];
     }
-
+*/
 }

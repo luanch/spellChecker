@@ -12,5 +12,5 @@ public abstract class CalculadorDeDistanciasEntreStrings {
     
 
     
-    public abstract int calcular();
+    public abstract int calcular(String primeiraString, String segundaString);
 }
