@@ -1,65 +1,54 @@
 package br.unirio.pm.spellChecker.bkTree;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Dictionary;
-import java.util.Hashtable;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Set;
 
 public class Node {
 
-    public String word;
-    public Hashtable Children;
+    public String palavra;
+    public HashMap<Integer, Node> Children;
  
-    public Node() {
-    	
-    }
- 
-    public Hashtable getChildren() {
-		return Children;
-	}
-
-	public void setChildren(Hashtable children) {
-		Children = children;
-	}
-
-	public String getWord() {
-		return word;
-	}
-
-
-	public void setWord(String word) {
-		this.word = word;
-	}
-
-
 	public Node(String word)
     {
-        this.word = word.toLowerCase();
+        this.palavra = word.toLowerCase();
+        this.Children = new HashMap<Integer, Node>();
     }
  
-    public Node funcaoQueRetornaONode (int key)
+//    public Hashtable getChildren() {
+//		return Children;
+//	}
+
+//	public void setChildren(Hashtable children) {
+//		Children = children;
+//	}
+
+	public String getWord() {
+		return palavra;
+	}
+
+
+//	public void setWord(String word) {
+//		this.word = word;
+//	}
+
+
+    public Node getNodeFilho (int key)
     {
         return (Node)Children.get(key); 
     }
  
-    public ArrayList Keys()
+    public Set<Integer> Keys()
     {
-            if(Children == null)
-                return new ArrayList();
-            return Collections.list(Children.keys());
+        return Children.keySet();
     }
  
     public boolean ContainsKey(int key)
     {
-        return Children != null && Children.contains(key);
+        return Children.containsKey(key);
     }
  
-    public void AddChild(int key, String word)
+    public void adicionarFilho(int key, String word)
     {
-        if(this.Children == null)
-            Children = new Hashtable();
         this.Children.put(key, new Node(word));
     }
 }

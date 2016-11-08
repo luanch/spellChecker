@@ -1,16 +1,23 @@
 package br.unirio.pm.spellChecker;
-
-public abstract class CalculadorDeDistanciasEntreStrings {
-    
-	 protected static LevenshteinDistance instancia = null;
-
+/**
+ * Classe que calcula a distancia entre duas strings
+ */
+public  class CalculadorDeDistanciasEntreStrings {
+	
+	private final int CODIGO_LEVENSHTEIN = 1;
+	private MoldeDeCalculadorDeDistanciaEntreStrings calculador;
+	
 	/**
-     *  limite é uma variável que, uma vez definida no construtor, não pode ser alterada
-     */
-    protected int limite;
-    
-    
-
-    
-    public abstract int calcular(String primeiraString, String segundaString);
+	 * Construtor
+	 */
+	public CalculadorDeDistanciasEntreStrings(int codigoCalculador){
+		switch(codigoCalculador){
+		case(1):
+			calculador = new CalculadorDeDistanciaDeLevenshtein();
+		}
+	}
+	
+	public int getCodigoLevenshtein(){
+		return CODIGO_LEVENSHTEIN;
+	}
 }

@@ -1,111 +1,77 @@
 package br.unirio.pm.spellChecker.bkTree;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.Set;
+
+import br.unirio.pm.spellChecker.CalculadorDeDistanciaDeLevenshtein;
+import br.unirio.pm.spellChecker.CalculadorDeDistanciasEntreStrings;
 
 public class BKTree {
 	
-	 
-    private static Node Root;
- 
-    public static void Add(String word)
-    {
-        word = word.toLowerCase();
-        if (Root == null)
+    private static Node raiz;
+    
+    static CalculadorDeDistanciaDeLevenshtein calculador = new CalculadorDeDistanciaDeLevenshtein(); 
+    
+    /**
+     * Insere uma nova palavra na arvore
+     */
+    public static void inserir(String palavra){
+        palavra = palavra.toLowerCase();
+        if (raiz == null)
         {
-            Root = new Node(word);
+            raiz = new Node(palavra);
             return;
         }
  
-        Node curNode = Root;
- 
-        int dist = LevenshteinDistance(curNode.word, word);
-        while (curNode.ContainsKey(dist))
+        Node nodeAtual = raiz;
+        
+        int distancia = calculador.calcular(nodeAtual.palavra, palavra);
+        while (nodeAtual.ContainsKey(distancia))
         {
-            if (dist == 0) return;
- 
-            curNode = curNode.funcaoQueRetornaONode(dist);
-            dist = LevenshteinDistance(curNode.word, word);
+            if (distancia == 0) return;
+            
+            // itera para o node filho
+            nodeAtual = nodeAtual.getNodeFilho(distancia);
+            distancia = calculador.calcular(nodeAtual.palavra, palavra);
         }
  
-        curNode.AddChild(dist,word);
+        nodeAtual.adicionarFilho(distancia,palavra);
     }
  
-    public static List<String> Search(String word, int d)
+    /**
+     * Busca palavras similares a uma palavra respeitando um limite de operacoes
+     * @param limiteDeOperacoes: quantidade maxima de operacoes que a palavra buscada pode sofrer
+     */
+    public static List<String> buscar(String palavra, int limiteDeOperacoes)
     {
-        List<String> rtn = new ArrayList<String>();
-        word = word.toLowerCase();
+        List<String> resultadoDaBusca = new ArrayList<String>();
+        palavra = palavra.toLowerCase();
  
-        RecursiveSearch(Root, rtn, word, d);
+        buscar(raiz, resultadoDaBusca, palavra, limiteDeOperacoes);
  
-        return rtn;
+        return resultadoDaBusca;
     }
  
-    private static void RecursiveSearch(Node node, List<String> rtn, String word, int d )
+    private static void buscar(Node node, List<String> resultadoDaBusca, String palavra, int limiteDeOperacoes )
     {
-        int curDist = LevenshteinDistance(node.word, word);
-        int minDist = curDist - d;
-        int maxDist = curDist + d;
- 
-        if (curDist <= d)
-            rtn.add(node.word);
- 
- //       foreach (int key in node.Keys.Cast<int>().Where(key => minDist <= key && key <= maxDist))
- //       {
- //           RecursiveSearch(node[key], rtn, word, d);
- //       }
+        int distanciaAtual = calculador.calcular(node.palavra, palavra);
         
-        //for each key in node
+        // seguindo o algoritmo da bk-tree, busca-se apenas palavras entre limite-1 e limite+1
+        int limiteMinimo = distanciaAtual - limiteDeOperacoes;
+        int limiteMaximo = distanciaAtual + limiteDeOperacoes;
+ 
+        if (distanciaAtual <= limiteDeOperacoes)
+            resultadoDaBusca.add(node.palavra);
+
+        Set<Integer> conjuntoDeChaves = node.Keys();
         
-        ArrayList n = node.Keys();
-        int size = n.size();
-        for (int i = 0; i < size; i++) {
-        	int indice = Integer.parseInt(n.get(i).toString());
-        	int currentKey =  indice;
-        	if ((currentKey >= minDist) && (minDist <= currentKey) && (currentKey <= maxDist)) {
-                RecursiveSearch(node.funcaoQueRetornaONode(indice), rtn, word, d);
+        for (Integer chave : conjuntoDeChaves) {
+        	if ((chave >= limiteMinimo) && (limiteMinimo <= chave) && (chave <= limiteMaximo)) {
+                buscar(node.getNodeFilho(chave), resultadoDaBusca, palavra, limiteDeOperacoes);
         	}
         }
     }
  
-    //monta a matriz que gera a distancia minima para que uma string se torne outra 
-    public static int LevenshteinDistance(String first, String second)
-    {
-        if (first.length() == 0) 
-        	return second.length();
-        if (second.length() == 0) 
-        	return first.length();
- 
-        int lenFirst = first.length();
-        int lenSecond = second.length();
- 
-        int[][] d = new int[lenFirst + 1][lenSecond + 1];
-        
- 
-        for (int i = 0; i <= lenFirst; i++)
-            d[i][0] = i;
- 
-        for (int i = 0; i <= lenSecond; i++)
-            d[0][i] = i;
- 
-        for (int i = 1; i <= lenFirst; i++)
-        {
-            for (int j = 1; j <= lenSecond; j++)
-            {
-            	int match;
-            	if (first.charAt(i - 1) == second.charAt(j - 1)) {
-            		match = 0;
-            	}
-            	else {
-            		match = 1;
-            	}
-            	
-                d[i][j] = Math.min(Math.min(d[i - 1][j] + 1, d[i][j - 1] + 1), d[i - 1][j - 1] + match);
-            }
-        }
-        
-        //o ultimo elemento da matriz Ã© a distancia minima
-        return d[lenFirst][lenSecond];
-    }
+
 }
