@@ -4,19 +4,30 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import br.unirio.pm.spellChecker.CalculadorDeDistanciaDeLevenshtein;
-import br.unirio.pm.spellChecker.CalculadorDeDistanciasEntreStrings;
+import br.unirio.pm.spellChecker.DistanciaDeLevenshtein;
+import br.unirio.pm.spellChecker.MoldeDeCalculadorDeDistanciaEntreStrings;
+import br.unirio.pm.spellChecker.LeitorDePalavras.LeitorDePalavras;
 
 public class BKTree {
 	
+	private final int CODIGO_LEVENSHTEIN = 1;
     private static Node raiz;
+    private MoldeDeCalculadorDeDistanciaEntreStrings calculador;
     
-    static CalculadorDeDistanciaDeLevenshtein calculador = new CalculadorDeDistanciaDeLevenshtein(); 
+    public BKTree(int codigoCalculador) {
+    	
+    	
+		switch(codigoCalculador){
+		default:
+			calculador = new DistanciaDeLevenshtein();
+		}
+		LeitorDePalavras.gerarDicionario(this);
+	}
     
     /**
      * Insere uma nova palavra na arvore
      */
-    public static void inserir(String palavra){
+    public void inserir(String palavra){
         palavra = palavra.toLowerCase();
         if (raiz == null)
         {
@@ -43,18 +54,17 @@ public class BKTree {
      * Busca palavras similares a uma palavra respeitando um limite de operacoes
      * @param limiteDeOperacoes: quantidade maxima de operacoes que a palavra buscada pode sofrer
      */
-    public static List<String> buscar(String palavra, int limiteDeOperacoes)
-    {
+    public List<String> buscar(String palavra, int limiteDeOperacoes){
         List<String> resultadoDaBusca = new ArrayList<String>();
-        palavra = palavra.toLowerCase();
- 
-        buscar(raiz, resultadoDaBusca, palavra, limiteDeOperacoes);
- 
+
+        if((palavra != null) && (palavra != "")){
+            palavra = palavra.toLowerCase();
+        	buscar(raiz, resultadoDaBusca, palavra, limiteDeOperacoes);
+        }
         return resultadoDaBusca;
     }
  
-    private static void buscar(Node node, List<String> resultadoDaBusca, String palavra, int limiteDeOperacoes )
-    {
+    private void buscar(Node node, List<String> resultadoDaBusca, String palavra, int limiteDeOperacoes ){
         int distanciaAtual = calculador.calcular(node.palavra, palavra);
         
         // seguindo o algoritmo da bk-tree, busca-se apenas palavras entre limite-1 e limite+1
@@ -72,6 +82,12 @@ public class BKTree {
         	}
         }
     }
- 
-
+    
+	public int calcular (String primeiraPalavra, String segundaPalavra){
+		return calculador.calcular(primeiraPalavra, segundaPalavra);
+	}
+    
+	public int getCodigoLevenshtein(){
+		return CODIGO_LEVENSHTEIN;
+	}
 }

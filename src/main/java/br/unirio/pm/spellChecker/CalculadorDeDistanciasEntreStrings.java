@@ -1,23 +1,26 @@
 package br.unirio.pm.spellChecker;
+
+import java.util.List;
+
+import br.unirio.pm.spellChecker.bkTree.BKTree;
+
 /**
  * Classe que calcula a distancia entre duas strings
  */
 public  class CalculadorDeDistanciasEntreStrings {
-	
-	private final int CODIGO_LEVENSHTEIN = 1;
-	private MoldeDeCalculadorDeDistanciaEntreStrings calculador;
+
+	private BKTree arvoreDePalavras;
 	
 	/**
 	 * Construtor
 	 */
 	public CalculadorDeDistanciasEntreStrings(int codigoCalculador){
-		switch(codigoCalculador){
-		case(1):
-			calculador = new CalculadorDeDistanciaDeLevenshtein();
-		}
+			arvoreDePalavras = new BKTree(codigoCalculador);
+	}
+
+	public List<String> buscar(String palavra, int limiteDeOperacoes){
+		return arvoreDePalavras.buscar(palavra, limiteDeOperacoes);
 	}
 	
-	public int getCodigoLevenshtein(){
-		return CODIGO_LEVENSHTEIN;
-	}
+
 }

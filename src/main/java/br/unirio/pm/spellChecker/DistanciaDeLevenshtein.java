@@ -2,12 +2,14 @@ package br.unirio.pm.spellChecker;
 
 import java.util.Arrays;
 
+import br.unirio.pm.spellChecker.bkTree.BKTree;
+
 /**
  * Calcula a distancia (numero de operacoes necessarias) entre duas sequencias de caracteres
  */
-public class CalculadorDeDistanciaDeLevenshtein extends MoldeDeCalculadorDeDistanciaEntreStrings {	
-
-    /**
+public class DistanciaDeLevenshtein extends MoldeDeCalculadorDeDistanciaEntreStrings{	
+  
+	/**
      * calcula a distancia entre duas palavras 
      */
 	@Override
