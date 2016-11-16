@@ -11,17 +11,18 @@ import br.unirio.pm.spellChecker.LeitorDePalavras.LeitorDePalavras;
 public class BKTree {
 	
 	private final int CODIGO_LEVENSHTEIN = 1;
-    private static Node raiz;
+    private Node raiz;
     private MoldeDeCalculadorDeDistanciaEntreStrings calculador;
     
     public BKTree(int codigoCalculador) {
     	
+    	LeitorDePalavras leitorDePalavras = new LeitorDePalavras();
     	
 		switch(codigoCalculador){
-		default:
+		case 1:
 			calculador = new DistanciaDeLevenshtein();
 		}
-		LeitorDePalavras.gerarDicionario(this);
+		leitorDePalavras.gerarDicionario(this);
 	}
     
     /**
@@ -36,15 +37,19 @@ public class BKTree {
         }
  
         Node nodeAtual = raiz;
-        
+
+
         int distancia = calculador.calcular(nodeAtual.palavra, palavra);
-        while (nodeAtual.ContainsKey(distancia))
+        if (distancia == 0) return;
+        
+        while (nodeAtual.contemChave(distancia))
         {
-            if (distancia == 0) return;
             
             // itera para o node filho
             nodeAtual = nodeAtual.getNodeFilho(distancia);
+           
             distancia = calculador.calcular(nodeAtual.palavra, palavra);
+            if (distancia == 0) return;
         }
  
         nodeAtual.adicionarFilho(distancia,palavra);
@@ -74,7 +79,7 @@ public class BKTree {
         if (distanciaAtual <= limiteDeOperacoes)
             resultadoDaBusca.add(node.palavra);
 
-        Set<Integer> conjuntoDeChaves = node.Keys();
+        Set<Integer> conjuntoDeChaves = node.getChaves();
         
         for (Integer chave : conjuntoDeChaves) {
         	if ((chave >= limiteMinimo) && (limiteMinimo <= chave) && (chave <= limiteMaximo)) {

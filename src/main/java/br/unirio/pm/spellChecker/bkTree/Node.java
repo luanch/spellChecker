@@ -6,12 +6,12 @@ import java.util.Set;
 public class Node {
 
     public String palavra;
-    public HashMap<Integer, Node> Children;
+    public HashMap<Integer, Node> filhos;
  
-	public Node(String word)
+	public Node(String palavra)
     {
-        this.palavra = word.toLowerCase();
-        this.Children = new HashMap<Integer, Node>();
+        this.palavra = palavra.toLowerCase();
+        this.filhos = new HashMap<Integer, Node>();
     }
  
 //    public Hashtable getChildren() {
@@ -22,7 +22,7 @@ public class Node {
 //		Children = children;
 //	}
 
-	public String getWord() {
+	public String getPalavra() {
 		return palavra;
 	}
 
@@ -34,21 +34,21 @@ public class Node {
 
     public Node getNodeFilho (int key)
     {
-        return (Node)Children.get(key); 
+        return (Node)filhos.get(key); 
     }
  
-    public Set<Integer> Keys()
+    public Set<Integer> getChaves()
     {
-        return Children.keySet();
+        return filhos.keySet();
     }
  
-    public boolean ContainsKey(int key)
+    public boolean contemChave(int key)
     {
-        return Children.containsKey(key);
+        return filhos.containsKey(key);
     }
  
     public void adicionarFilho(int key, String word)
     {
-        this.Children.put(key, new Node(word));
+        this.filhos.put(key, new Node(word));
     }
 }
