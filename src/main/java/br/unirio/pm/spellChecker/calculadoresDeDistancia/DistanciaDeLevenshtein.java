@@ -1,8 +1,4 @@
-package br.unirio.pm.spellChecker;
-
-import java.util.Arrays;
-
-import br.unirio.pm.spellChecker.bkTree.BKTree;
+package br.unirio.pm.spellChecker.calculadoresDeDistancia;
 
 /**
  * Calcula a distancia (numero de operacoes necessarias) entre duas sequencias de caracteres
@@ -10,10 +6,13 @@ import br.unirio.pm.spellChecker.bkTree.BKTree;
 public class DistanciaDeLevenshtein extends MoldeDeCalculadorDeDistanciaEntreStrings{	
   
 	/**
-     * calcula a distancia entre duas palavras 
+     * calcula a distancia entre duas palavras, retornando -1 caso não haja palavras a serem comparadas
      */
 	@Override
 	public int calcular (String primeiraPalavra, String segundaPalavra){
+		if (primeiraPalavra.length() == 0 && segundaPalavra.length() == 0) {
+			return -1;
+		}
         if (primeiraPalavra.length() == 0) 
         	return segundaPalavra.length();
         if (segundaPalavra.length() == 0) 
@@ -46,10 +45,18 @@ public class DistanciaDeLevenshtein extends MoldeDeCalculadorDeDistanciaEntreStr
             	else {
             		letrasDiferentes = 1;
             	}
-            	
+//            	  h[i + 1][j + 1] = minimo(
+//                          h[i][j] + cost, // substitution
+//                          h[i + 1][j] + 1, // insertion
+//                          h[i][j + 1] + 1, // deletion
+//                          h[i1][j1] + (i - i1 - 1) + 1 + (j - j1 - 1));
+
             	// adiciona na matriz o menor valor dentre os vizinhos anteriores (lado, cima e diagonal esquerda)
-                matrizDeLevenshtein[i][j] = Math.min(Math.min(matrizDeLevenshtein[i - 1][j] + 1,
-                		matrizDeLevenshtein[i][j - 1] + 1), matrizDeLevenshtein[i - 1][j - 1] + letrasDiferentes);
+                matrizDeLevenshtein[i][j] = 
+                		minimo(matrizDeLevenshtein[i - 1][j] + 1,
+                				matrizDeLevenshtein[i][j - 1] + 1,
+                				matrizDeLevenshtein[i - 1][j - 1]
+						) + letrasDiferentes;
             }
         }
         

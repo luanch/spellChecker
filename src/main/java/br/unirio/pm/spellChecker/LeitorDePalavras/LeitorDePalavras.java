@@ -38,10 +38,5 @@ public class LeitorDePalavras {
 		} catch (IOException e) {
 			System.out.println("Erro ao ler palavra do dicionario - " + e);
 		} 
-		
-		arvore.inserir("bianca");
-		arvore.inserir("oi");
-		arvore.inserir("oi");
-		arvore.inserir("casa");
 	}
 }

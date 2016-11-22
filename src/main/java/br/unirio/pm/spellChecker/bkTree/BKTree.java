@@ -4,42 +4,56 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import br.unirio.pm.spellChecker.DistanciaDeLevenshtein;
-import br.unirio.pm.spellChecker.MoldeDeCalculadorDeDistanciaEntreStrings;
 import br.unirio.pm.spellChecker.LeitorDePalavras.LeitorDePalavras;
+import br.unirio.pm.spellChecker.calculadoresDeDistancia.DistanciaDeDamerauLevenshtein;
+import br.unirio.pm.spellChecker.calculadoresDeDistancia.DistanciaDeLevenshtein;
+import br.unirio.pm.spellChecker.calculadoresDeDistancia.MoldeDeCalculadorDeDistanciaEntreStrings;
 
 public class BKTree {
 	
 	private final int CODIGO_LEVENSHTEIN = 1;
+	private final int CODIGO_DAMERAU_LEVENSHTEIN = 2;
     private Node raiz;
+    
+    
+    // Aceita qualquer calculador de distancias entre string
     private MoldeDeCalculadorDeDistanciaEntreStrings calculador;
     
+    /**
+     * Construtor da BKTree, que recebe como parametro qual
+     * calculador de distancia será utilizado
+     */
     public BKTree(int codigoCalculador) {
     	
-    	LeitorDePalavras leitorDePalavras = new LeitorDePalavras();
+    	//LeitorDePalavras leitorDePalavras = new LeitorDePalavras();
     	
 		switch(codigoCalculador){
-		case 1:
+		case CODIGO_LEVENSHTEIN:
 			calculador = new DistanciaDeLevenshtein();
+			break;
+			
+		case CODIGO_DAMERAU_LEVENSHTEIN:
+			calculador = new DistanciaDeDamerauLevenshtein();
+			
 		}
-		leitorDePalavras.gerarDicionario(this);
+		//leitorDePalavras.gerarDicionario(this);
 	}
     
     /**
      * Insere uma nova palavra na arvore
      */
     public void inserir(String palavra){
-        palavra = palavra.toLowerCase();
-        if (raiz == null)
-        {
-            raiz = new Node(palavra);
+        String palavraModificada = normalizarPalavra(palavra);
+        	
+        if (raiz == null){
+            raiz = new Node(palavraModificada);
             return;
         }
  
         Node nodeAtual = raiz;
 
 
-        int distancia = calculador.calcular(nodeAtual.palavra, palavra);
+        int distancia = calculador.calcular(nodeAtual.palavra, palavraModificada);
         if (distancia == 0) return;
         
         while (nodeAtual.contemChave(distancia))
@@ -48,11 +62,11 @@ public class BKTree {
             // itera para o node filho
             nodeAtual = nodeAtual.getNodeFilho(distancia);
            
-            distancia = calculador.calcular(nodeAtual.palavra, palavra);
+            distancia = calculador.calcular(nodeAtual.palavra, palavraModificada);
             if (distancia == 0) return;
         }
  
-        nodeAtual.adicionarFilho(distancia,palavra);
+        nodeAtual.adicionarFilho(distancia,palavraModificada);
     }
  
     /**
@@ -61,31 +75,45 @@ public class BKTree {
      */
     public List<String> buscar(String palavra, int limiteDeOperacoes){
         List<String> resultadoDaBusca = new ArrayList<String>();
-
+        	
         if((palavra != null) && (palavra != "")){
-            palavra = palavra.toLowerCase();
+
         	buscar(raiz, resultadoDaBusca, palavra, limiteDeOperacoes);
         }
         return resultadoDaBusca;
     }
  
-    private void buscar(Node node, List<String> resultadoDaBusca, String palavra, int limiteDeOperacoes ){
-        int distanciaAtual = calculador.calcular(node.palavra, palavra);
+    private boolean buscar(Node node, List<String> resultadoDaBusca, String palavra, int limiteDeOperacoes ){
+        String palavraModificada = normalizarPalavra(palavra);	
+    	int distanciaAtual = calculador.calcular(node.palavra, palavraModificada);
         
         // seguindo o algoritmo da bk-tree, busca-se apenas palavras entre limite-1 e limite+1
         int limiteMinimo = distanciaAtual - limiteDeOperacoes;
         int limiteMaximo = distanciaAtual + limiteDeOperacoes;
  
-        if (distanciaAtual <= limiteDeOperacoes)
-            resultadoDaBusca.add(node.palavra);
-
+        if ((distanciaAtual <= limiteDeOperacoes) && (distanciaAtual != 0)){ 
+            	resultadoDaBusca.add(node.palavra);
+        }
+        else if (distanciaAtual == 0) {
+        	return true;
+        }
+        
         Set<Integer> conjuntoDeChaves = node.getChaves();
         
         for (Integer chave : conjuntoDeChaves) {
-        	if ((chave >= limiteMinimo) && (limiteMinimo <= chave) && (chave <= limiteMaximo)) {
-                buscar(node.getNodeFilho(chave), resultadoDaBusca, palavra, limiteDeOperacoes);
+        	if ((chave >= limiteMinimo) && (chave <= limiteMaximo)) {
+                if( buscar(node.getNodeFilho(chave), resultadoDaBusca, palavraModificada, limiteDeOperacoes))
+                	return true;
         	}
         }
+        return false;
+    }
+    
+    public boolean contem(String palavra) {
+    	if (raiz == null) 
+    		return false;
+        List<String> resultadoDaBusca = new ArrayList<String>();
+    	return buscar(raiz, resultadoDaBusca , palavra, 0);
     }
     
 	public int calcular (String primeiraPalavra, String segundaPalavra){
@@ -94,5 +122,17 @@ public class BKTree {
     
 	public int getCodigoLevenshtein(){
 		return CODIGO_LEVENSHTEIN;
+	}
+	
+	public int getCodigoDamerauLevenshtein(){
+		return CODIGO_DAMERAU_LEVENSHTEIN;
+	}
+	
+	private String normalizarPalavra(String palavra){
+        String palavraModificada = palavra.toUpperCase();
+        palavraModificada = palavraModificada.trim();
+        palavraModificada = palavraModificada.replace("-", "");
+        
+        return palavraModificada;
 	}
 }

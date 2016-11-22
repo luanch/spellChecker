@@ -10,7 +10,7 @@ public class Node {
  
 	public Node(String palavra)
     {
-        this.palavra = palavra.toLowerCase();
+        this.palavra = palavra;
         this.filhos = new HashMap<Integer, Node>();
     }
  
