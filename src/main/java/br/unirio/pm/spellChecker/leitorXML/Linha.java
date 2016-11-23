@@ -7,8 +7,10 @@ public class Linha{
 	private String letras;
 	private double offset;
 	
+	private static final int OFFSET_DEFAULT = 1;
+	
 	public Linha(String letras){
-		new Linha(letras, 1);
+		new Linha(letras, OFFSET_DEFAULT);
 	}
 	
 	public Linha(String letras, double offset){

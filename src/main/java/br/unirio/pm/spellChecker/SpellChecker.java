@@ -5,6 +5,8 @@ import java.util.List;
 
 import br.unirio.pm.spellChecker.LeitorDePalavras.LeitorDePalavras;
 import br.unirio.pm.spellChecker.bkTree.BKTree;
+import br.unirio.pm.spellChecker.leitorXML.LeitorDeTeclado;
+import br.unirio.pm.spellChecker.leitorXML.Teclado;
 
 /**
  * Classe que ve se uma palavra é válida para um dicionário e caso não seja, 
@@ -12,13 +14,17 @@ import br.unirio.pm.spellChecker.bkTree.BKTree;
  */
 public class SpellChecker {
 	private BKTree dicionarioDePalavras;
-
+	ArrayList<Teclado> teclados;
+	
     public SpellChecker(int codigoCalculador) {
     	
         dicionarioDePalavras = new BKTree(codigoCalculador);
         LeitorDePalavras leitorDePalavras = new LeitorDePalavras();
+    	LeitorDeTeclado leitorDeTeclado = new LeitorDeTeclado();
     	
+    	teclados = leitorDeTeclado.lerTeclado();
 		
+    	
 		leitorDePalavras.gerarDicionario(dicionarioDePalavras);
     }
     

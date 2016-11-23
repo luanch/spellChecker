@@ -1,6 +1,7 @@
 package br.unirio.pm.spellChecker.leitorXML;
 
 import java.io.File;
+import java.util.ArrayList;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -13,8 +14,10 @@ import org.w3c.dom.NodeList;
 
 public class LeitorDeTeclado {
 
-	public void lerTeclado() {
+	public ArrayList<Teclado> lerTeclado() {
 	    
+		ArrayList<Teclado> teclados = new ArrayList<Teclado>();
+		
 		try {
 			File arquivoXml = new File("KeyboardLayouts.xml");
 			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -25,25 +28,16 @@ public class LeitorDeTeclado {
 			//read this - http://stackoverflow.com/questions/13786607/normalization-in-dom-parsing-with-java-how-does-it-work
 			documento.getDocumentElement().normalize();
 		
-			System.out.println("Root element :" + documento.getDocumentElement().getNodeName());
-		
 			NodeList nList = documento.getElementsByTagName("layout");
-	
-			
-			System.out.println("----------------------------");
 	
 			for (int temp = 0; temp < nList.getLength(); temp++) {
 		
 				Node nNode = nList.item(temp);
-		
-				System.out.println("\nCurrent Element :" + nNode.getNodeName());
-
-				
+						
 				if (nNode.getNodeType() == Node.ELEMENT_NODE) {
 		
 					Element eElement = (Element) nNode;
 		
-					System.out.println("Staff id : " + eElement.getAttribute("model"));
 					Teclado teclado = new Teclado();
 					teclado.setNome(eElement.getAttribute("model"));
 					
@@ -74,10 +68,12 @@ public class LeitorDeTeclado {
 						
 						teclado.adicionarLinha(linha);	
 					}
+					teclados.add(teclado);
 				}
 			}
 	    } catch (Exception e) {
 	    	e.printStackTrace();
 	    }
+		return teclados;
 	}
 }
