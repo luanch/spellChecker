@@ -17,7 +17,6 @@ public class DistanciaTeclasTest {
 
 	private static LeitorDeTeclado geradorDeTeclados;
 	private static ArrayList<Teclado> teclados;
-	private Teclado teclado;
 	private DistanciaEntreTeclas calculador;
 
 	
@@ -36,7 +35,10 @@ public class DistanciaTeclasTest {
 	@Test
 	public void testTeclado() {
 		calculador = new DistanciaEntreTeclas(teclados.get(0));
-		assertEquals(2, calculador.calcularDistancia('q', 'e'));
+		assertEquals(2.0, calculador.calcularDistancia('q', 'e'));
+		
+		assertEquals(1.25, calculador.calcularDistancia('a', 'q'));
+		
 		
 	}
 	

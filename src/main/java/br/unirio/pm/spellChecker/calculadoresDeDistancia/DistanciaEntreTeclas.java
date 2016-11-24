@@ -17,6 +17,10 @@ public class DistanciaEntreTeclas {
 	
 	public double calcularDistancia(char letraInicial, char letraFinal) {
 		double distancia = -1;
+		
+		letraInicial = Character.toUpperCase(letraInicial);
+		letraFinal = Character.toUpperCase(letraFinal);		
+				
 		if (!Character.isLetter(letraInicial) || !Character.isLetter(letraFinal)) {
 			return distancia;
 		}
@@ -29,19 +33,19 @@ public class DistanciaEntreTeclas {
 			char[] letras = linhas.get(i).getLetras();
 			for (int j = 0; j < letras.length; j++) {
 				if (letras[j] == letraInicial) {
-					posicaoNoTecladoDaLetraInicial[0] = i;
-					posicaoNoTecladoDaLetraInicial[1] = j;
+					posicaoNoTecladoDaLetraInicial[1] = i;
+					posicaoNoTecladoDaLetraInicial[0] = j;
 					
 				}
 				if (letras[j] == letraFinal) {
-					posicaoNoTecladoDaLetraFinal[0] = i;
-					posicaoNoTecladoDaLetraFinal[1] = j;
+					posicaoNoTecladoDaLetraFinal[1] = i;
+					posicaoNoTecladoDaLetraFinal[0] = j;
 				}
 			}
 		}
 		
-		if (posicaoNoTecladoDaLetraInicial[0] == posicaoNoTecladoDaLetraFinal[0]) {
-			distancia = Math.abs(posicaoNoTecladoDaLetraInicial[1] - posicaoNoTecladoDaLetraInicial[1]);
+		if (posicaoNoTecladoDaLetraInicial[1] == posicaoNoTecladoDaLetraFinal[1]) {
+			distancia = (double) Math.abs(posicaoNoTecladoDaLetraInicial[0] - posicaoNoTecladoDaLetraFinal[0]);
 			return distancia;
 		}
 		
@@ -49,15 +53,15 @@ public class DistanciaEntreTeclas {
 		double distanciaCatetoColuna;
 		double offsetAcumulado = 0;
 		
-		int linhaMaisAbaixo = Math.max(posicaoNoTecladoDaLetraInicial[0], posicaoNoTecladoDaLetraInicial[0]);
-		int linhaMaisAcima = Math.min(posicaoNoTecladoDaLetraInicial[0], posicaoNoTecladoDaLetraInicial[0]);
+		int linhaMaisAbaixo = Math.max(posicaoNoTecladoDaLetraInicial[1], posicaoNoTecladoDaLetraFinal[1]);
+		int linhaMaisAcima = Math.min(posicaoNoTecladoDaLetraInicial[1], posicaoNoTecladoDaLetraFinal[1]);
 
 		for (int i = linhaMaisAbaixo; i > linhaMaisAcima; i--) {
 			offsetAcumulado += linhas.get(i).getOffset();
 		}
 		
-		distanciaCatetoLinha = Math.abs(posicaoNoTecladoDaLetraInicial[0] - posicaoNoTecladoDaLetraInicial[0]) + offsetAcumulado;
-		distanciaCatetoColuna = Math.abs(posicaoNoTecladoDaLetraInicial[1] - posicaoNoTecladoDaLetraInicial[1]);
+		distanciaCatetoColuna = Math.abs(posicaoNoTecladoDaLetraInicial[1] - posicaoNoTecladoDaLetraFinal[1]);
+		distanciaCatetoLinha = Math.abs(posicaoNoTecladoDaLetraInicial[0] - posicaoNoTecladoDaLetraFinal[0])+ offsetAcumulado;
 		
 		distancia = Math.sqrt((Math.pow(distanciaCatetoLinha, 2) + Math.pow(distanciaCatetoColuna, 2)));
 				
