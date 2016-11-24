@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class Linha{
-	private String letras;
+	private char[] letras;
 	private double offset;
 	
 	private static final int OFFSET_DEFAULT = 1;
@@ -14,7 +14,7 @@ public class Linha{
 	}
 	
 	public Linha(String letras, double offset){
-		this.letras = letras;
+		this.letras = letras.toCharArray();
 		this.offset = offset;
 	}
 }

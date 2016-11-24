@@ -13,5 +13,9 @@ public class Teclado {
 	public void adicionarLinha(Linha linha){
 		designTeclado.add(linha);
 	}
+	
+	public Teclado () {
+		designTeclado = new ArrayList<Linha>();
+	}
 
 }
