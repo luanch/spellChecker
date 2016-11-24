@@ -1,10 +1,17 @@
 package br.unirio.pm.spellChecker.calculadoresDeDistancia;
 
+import br.unirio.pm.spellChecker.utilitariosTeclado.Teclado;
+
 /**
  * Calcula a distancia (numero de operacoes necessarias) entre duas sequencias de caracteres
  */
 public class DistanciaDeLevenshtein extends MoldeDeCalculadorDeDistanciaEntreStrings{	
-  
+	
+	
+	public DistanciaDeLevenshtein(Teclado teclado) {
+		this.teclado = teclado;
+	}
+	
 	/**
      * calcula a distancia entre duas palavras, retornando -1 caso não haja palavras a serem comparadas
      */

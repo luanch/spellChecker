@@ -9,7 +9,11 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import br.unirio.pm.spellChecker.LeitorDePalavras.LeitorDePalavras;
 import br.unirio.pm.spellChecker.bkTree.BKTree;
+import br.unirio.pm.spellChecker.calculadoresDeDistancia.DistanciaDeLevenshtein;
+import br.unirio.pm.spellChecker.utilitariosTeclado.Teclado;
+import br.unirio.pm.spellChecker.utilitariosTeclado.TiposDeTeclado;
 
 
 public class BkTreeTest {
@@ -23,14 +27,27 @@ public class BkTreeTest {
 	
 	@BeforeClass
 	public static void inicializadorGeral(){
-		System.out.println("Comecei");
-		bkTree = new BKTree(1);
-		System.out.println("Terminei");
+		
+
 		
 	}
 	
 	@Test
 	public void testInsercaoDePalavra(){
+		
+
+
+    	
+    	TiposDeTeclado tiposDeTeclado = new TiposDeTeclado();
+    	Teclado teclado = tiposDeTeclado.getTecladoByName("QWERTY");
+    	
+		
+		DistanciaDeLevenshtein calculador = new DistanciaDeLevenshtein(teclado);
+		
+		BKTree bkTree = new BKTree(calculador);
+		
+		
+		
 		assertFalse (bkTree.contem("casa"));
 		bkTree.inserir("casa");
 		assertTrue (bkTree.contem("casa"));

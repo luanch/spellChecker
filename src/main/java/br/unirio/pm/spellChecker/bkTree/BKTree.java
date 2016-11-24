@@ -11,10 +11,10 @@ import br.unirio.pm.spellChecker.calculadoresDeDistancia.MoldeDeCalculadorDeDist
 
 public class BKTree {
 	
-	private final int CODIGO_LEVENSHTEIN = 1;
-	private final int CODIGO_DAMERAU_LEVENSHTEIN = 2;
     private Node raiz;
-    
+    private final int CODIGO_LEVENSHTEIN = 1;
+	private final int CODIGO_DAMERAU_LEVENSHTEIN = 2;
+	
     
     // Aceita qualquer calculador de distancias entre string
     private MoldeDeCalculadorDeDistanciaEntreStrings calculador;
@@ -23,20 +23,9 @@ public class BKTree {
      * Construtor da BKTree, que recebe como parametro qual
      * calculador de distancia será utilizado
      */
-    public BKTree(int codigoCalculador) {
+    public BKTree(MoldeDeCalculadorDeDistanciaEntreStrings calculador) {
     	
-    	//LeitorDePalavras leitorDePalavras = new LeitorDePalavras();
-    	
-		switch(codigoCalculador){
-		case CODIGO_LEVENSHTEIN:
-			calculador = new DistanciaDeLevenshtein();
-			break;
-			
-		case CODIGO_DAMERAU_LEVENSHTEIN:
-			calculador = new DistanciaDeDamerauLevenshtein();
-			
-		}
-		//leitorDePalavras.gerarDicionario(this);
+    	this.calculador = calculador;
 	}
     
     /**

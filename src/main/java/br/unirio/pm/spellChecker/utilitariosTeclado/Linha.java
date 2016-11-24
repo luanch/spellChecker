@@ -1,4 +1,4 @@
-package br.unirio.pm.spellChecker.leitorXML;
+package br.unirio.pm.spellChecker.utilitariosTeclado;
 
 import lombok.Data;
 

@@ -9,6 +9,14 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import br.unirio.pm.spellChecker.LeitorDePalavras.LeitorDePalavras;
+import br.unirio.pm.spellChecker.bkTree.BKTree;
+import br.unirio.pm.spellChecker.calculadoresDeDistancia.DistanciaDeDamerauLevenshtein;
+import br.unirio.pm.spellChecker.calculadoresDeDistancia.DistanciaDeLevenshtein;
+import br.unirio.pm.spellChecker.calculadoresDeDistancia.MoldeDeCalculadorDeDistanciaEntreStrings;
+import br.unirio.pm.spellChecker.utilitariosTeclado.Teclado;
+import br.unirio.pm.spellChecker.utilitariosTeclado.TiposDeTeclado;
+
 
 public class SpellCheckerTest{
 	
@@ -23,14 +31,13 @@ public class SpellCheckerTest{
 	
 	@BeforeClass
 	public static void inicializadorGeral(){
-		System.out.println("Comecei");
-		spellChecker = new SpellChecker(1);
-		System.out.println("Terminei");
+		SpellChecker spellChecker;
 	}
 	
 	@Test
-	public void testPalavraVazia()
+	public void testPalavraVaziaLevenshtein()
 	{
+		spellChecker = new SpellChecker(1, "QWERTY");
 		assertEquals(listaEsperada, spellChecker.verificarPalavra("", 4));
 		assertEquals(listaEsperada, spellChecker.verificarPalavra("", 1));
 		assertEquals(listaEsperada, spellChecker.verificarPalavra("", 0));
@@ -40,7 +47,10 @@ public class SpellCheckerTest{
 	}
 	
 	@Test
-	public void testLetraTrocada(){
+	public void testLetraTrocadaLevenshtein(){
+		spellChecker = new SpellChecker(1, "QWERTY");
+
+		
 		List<String> lista = spellChecker.verificarPalavra("fiera", 2);
 		boolean resp = lista.contains("FEIRA");
 		assertTrue(resp);
@@ -53,17 +63,25 @@ public class SpellCheckerTest{
 	}
 	
 	@Test
-	public void testLetraAMais(){
+	public void testLetraAMaisLevenshtein(){
+		spellChecker = new SpellChecker(1, "QWERTY");
+
 		
-		assertTrue(spellChecker.verificarPalavra("casaz", 1).contains("CASA"));
+		assertTrue(spellChecker.verificarPalavra("casaz", 3).contains("CASA"));
+		
 		assertTrue(spellChecker.verificarPalavra("paralelepipewwe", 4).contains("PARALELEPIPEDO"));
+		assertTrue(spellChecker.verificarPalavra("paralelepipedoe", 1).contains("PARALELEPIPEDO"));
+		
 		
 		assertFalse(spellChecker.verificarPalavra("zurrarer", 1).contains("ZURRAR"));
 	} 
 	
 
 	@Test
-	public void testLetraFaltando(){
+	public void testLetraFaltandoLevenshtein(){
+		spellChecker = new SpellChecker(1, "QWERTY");
+
+		
 		assertTrue(spellChecker.verificarPalavra("feramenta", 1).contains("FERRAMENTA"));
 		
 		assertFalse(spellChecker.verificarPalavra("zura", 1).contains("ZURRAR"));

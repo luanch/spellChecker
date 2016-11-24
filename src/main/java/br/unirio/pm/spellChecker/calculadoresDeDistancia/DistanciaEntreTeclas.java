@@ -2,15 +2,16 @@ package br.unirio.pm.spellChecker.calculadoresDeDistancia;
 
 import java.util.ArrayList;
 
-import br.unirio.pm.spellChecker.leitorXML.Linha;
-import br.unirio.pm.spellChecker.leitorXML.Teclado;
+import br.unirio.pm.spellChecker.utilitariosTeclado.Linha;
+import br.unirio.pm.spellChecker.utilitariosTeclado.Teclado;
 
 public class DistanciaEntreTeclas {
 	
 	private Teclado teclado;
 	
+	
 	public DistanciaEntreTeclas (Teclado teclado) {
-		
+
 		this.teclado = teclado;
 		
 	}
@@ -61,10 +62,23 @@ public class DistanciaEntreTeclas {
 		}
 		
 		distanciaCatetoColuna = Math.abs(posicaoNoTecladoDaLetraInicial[1] - posicaoNoTecladoDaLetraFinal[1]);
-		distanciaCatetoLinha = Math.abs(posicaoNoTecladoDaLetraInicial[0] - posicaoNoTecladoDaLetraFinal[0])+ offsetAcumulado;
+		distanciaCatetoLinha = Math.abs(posicaoNoTecladoDaLetraInicial[0] - posicaoNoTecladoDaLetraFinal[0])+offsetAcumulado;
+		
+		
+		if(posicaoNoTecladoDaLetraInicial[1] == linhaMaisAbaixo){
+			if(posicaoNoTecladoDaLetraInicial[0] < posicaoNoTecladoDaLetraFinal[0]){
+				distanciaCatetoLinha = Math.abs(posicaoNoTecladoDaLetraInicial[0] - posicaoNoTecladoDaLetraFinal[0])-offsetAcumulado;
+				
+			}
+		}
+		else{
+			if(posicaoNoTecladoDaLetraFinal[0] < posicaoNoTecladoDaLetraInicial[0]){
+				distanciaCatetoLinha = Math.abs(posicaoNoTecladoDaLetraInicial[0] - posicaoNoTecladoDaLetraFinal[0])-offsetAcumulado;
+			}
+		}
 		
 		distancia = Math.sqrt((Math.pow(distanciaCatetoLinha, 2) + Math.pow(distanciaCatetoColuna, 2)));
-				
+	
 		return distancia;
 	}
 	

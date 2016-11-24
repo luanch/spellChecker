@@ -5,8 +5,12 @@ import java.util.List;
 
 import br.unirio.pm.spellChecker.LeitorDePalavras.LeitorDePalavras;
 import br.unirio.pm.spellChecker.bkTree.BKTree;
-import br.unirio.pm.spellChecker.leitorXML.LeitorDeTeclado;
-import br.unirio.pm.spellChecker.leitorXML.Teclado;
+import br.unirio.pm.spellChecker.calculadoresDeDistancia.DistanciaDeDamerauLevenshtein;
+import br.unirio.pm.spellChecker.calculadoresDeDistancia.DistanciaDeLevenshtein;
+import br.unirio.pm.spellChecker.calculadoresDeDistancia.MoldeDeCalculadorDeDistanciaEntreStrings;
+import br.unirio.pm.spellChecker.utilitariosTeclado.LeitorDeTeclado;
+import br.unirio.pm.spellChecker.utilitariosTeclado.Teclado;
+import br.unirio.pm.spellChecker.utilitariosTeclado.TiposDeTeclado;
 
 /**
  * Classe que ve se uma palavra é válida para um dicionário e caso não seja, 
@@ -14,18 +18,31 @@ import br.unirio.pm.spellChecker.leitorXML.Teclado;
  */
 public class SpellChecker {
 	private BKTree dicionarioDePalavras;
-	ArrayList<Teclado> teclados;
+	private TiposDeTeclado tiposDeTeclado;
+
+	private final int CODIGO_LEVENSHTEIN = 1;
+	private final int CODIGO_DAMERAU_LEVENSHTEIN = 2;
 	
-    public SpellChecker(int codigoCalculador) {
+    public SpellChecker(int codigoCalculador, String nomeTeclado) {
     	
-        dicionarioDePalavras = new BKTree(codigoCalculador);
-        LeitorDePalavras leitorDePalavras = new LeitorDePalavras();
-    	LeitorDeTeclado leitorDeTeclado = new LeitorDeTeclado();
+        
+        
     	
-    	teclados = leitorDeTeclado.lerTeclado();
-		
+    	TiposDeTeclado tiposDeTeclado = new TiposDeTeclado();
+    	Teclado teclado = tiposDeTeclado.getTecladoByName(nomeTeclado);
+    			
+    	MoldeDeCalculadorDeDistanciaEntreStrings calculador;
+		switch(codigoCalculador){	
+			case CODIGO_DAMERAU_LEVENSHTEIN:
+				calculador = new DistanciaDeDamerauLevenshtein(teclado);
+				break;
+			default:
+				calculador = new DistanciaDeLevenshtein(teclado);
+		}
+    	dicionarioDePalavras = new BKTree(calculador);
     	
-		leitorDePalavras.gerarDicionario(dicionarioDePalavras);
+    	LeitorDePalavras leitorDePalavras = new LeitorDePalavras();
+        leitorDePalavras.gerarDicionario(dicionarioDePalavras);
     }
     
 	/**
@@ -33,7 +50,8 @@ public class SpellChecker {
 	 * @param limiteDeOperacoes: quantidade maxima de operacoes que a palavra buscada pode sofrer
 	 */
    public List<String> verificarPalavra(String palavra, int limiteDeOperacoes){
-       List<String> resultadoDaBusca = new ArrayList<String>();
+       
+	   List<String> resultadoDaBusca = new ArrayList<String>();
 
 	   resultadoDaBusca =  dicionarioDePalavras.buscar(palavra, limiteDeOperacoes);
 	   

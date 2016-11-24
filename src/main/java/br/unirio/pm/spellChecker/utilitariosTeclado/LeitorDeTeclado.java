@@ -1,4 +1,4 @@
-package br.unirio.pm.spellChecker.leitorXML;
+package br.unirio.pm.spellChecker.utilitariosTeclado;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -14,7 +14,7 @@ import org.w3c.dom.NodeList;
 
 public class LeitorDeTeclado {
 
-	public ArrayList<Teclado> lerTeclado() {
+	public ArrayList<Teclado> getTeclados() {
 	    
 		ArrayList<Teclado> teclados = new ArrayList<Teclado>();
 		

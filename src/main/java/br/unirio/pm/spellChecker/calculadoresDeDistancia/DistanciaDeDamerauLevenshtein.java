@@ -2,11 +2,18 @@ package br.unirio.pm.spellChecker.calculadoresDeDistancia;
 
 import java.util.HashMap;
 
+import br.unirio.pm.spellChecker.utilitariosTeclado.Teclado;
+
 /**
  * Calcula a distancia de 
  * 
  */
 public class DistanciaDeDamerauLevenshtein  extends MoldeDeCalculadorDeDistanciaEntreStrings{
+	
+	
+	public DistanciaDeDamerauLevenshtein(Teclado teclado) {
+		this.teclado = teclado;
+	}
 	
 	/**
      * Compute the distance between strings: the minimum number of operations
