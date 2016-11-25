@@ -9,7 +9,7 @@ public abstract class MoldeDeCalculadorDeDistanciaEntreStrings {
 	
 	protected Teclado teclado;
 	
-    public abstract int calcular(String primeiraString, String segundaString);
+    public abstract int calcular(String primeiraPalavra, String segundaPalavra);
     
 
     protected int minimo(int a, int b, int c) {

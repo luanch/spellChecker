@@ -3,6 +3,9 @@ package br.unirio.pm.spellChecker.bkTree;
 import java.util.HashMap;
 import java.util.Set;
 
+/**
+ * Classe que define um nó da BKTree
+ */
 public class Node {
 
     public String palavra;
@@ -14,23 +17,9 @@ public class Node {
         this.filhos = new HashMap<Integer, Node>();
     }
  
-//    public Hashtable getChildren() {
-//		return Children;
-//	}
-
-//	public void setChildren(Hashtable children) {
-//		Children = children;
-//	}
-
 	public String getPalavra() {
 		return palavra;
 	}
-
-
-//	public void setWord(String word) {
-//		this.word = word;
-//	}
-
 
     public Node getNodeFilho (int key)
     {
@@ -42,11 +31,17 @@ public class Node {
         return filhos.keySet();
     }
  
+    /**
+     * Verifica se já contem a chave (distância) nos filhos do nó
+     */
     public boolean contemChave(int key)
     {
         return filhos.containsKey(key);
     }
  
+    /**
+     * Adiciona um filho ao nó
+     */
     public void adicionarFilho(int key, String word)
     {
         this.filhos.put(key, new Node(word));

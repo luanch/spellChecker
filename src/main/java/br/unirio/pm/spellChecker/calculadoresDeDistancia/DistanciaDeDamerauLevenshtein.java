@@ -5,93 +5,99 @@ import java.util.HashMap;
 import br.unirio.pm.spellChecker.utilitariosTeclado.Teclado;
 
 /**
- * Calcula a distancia de 
+ * Calcula a distancia de Damerou Levenshtein entre duas palavras 
  * 
  */
-public class DistanciaDeDamerauLevenshtein  extends MoldeDeCalculadorDeDistanciaEntreStrings{
-	
-	
+public class DistanciaDeDamerauLevenshtein extends MoldeDeCalculadorDeDistanciaEntreStrings{
+
 	public DistanciaDeDamerauLevenshtein(Teclado teclado) {
 		this.teclado = teclado;
 	}
 	
 	/**
-     * Compute the distance between strings: the minimum number of operations
-     * needed to transform one string into the other (insertion, deletion,
-     * substitution of a single character, or a transposition of two adjacent
-     * characters).
-     * @param primeiraString
-     * @param segundaString
-     * @return
+     * Calcula a distância entre duas palavras levando em consideração 
+     * o número mínimo de operações para transformar uma palavra na outra
+     * (inserção, remoção, substituição de um caracter por outro ou transposição
+     * de dois caracteres adjacentes)
+     * Retorna -1 caso não haja palavras a serem comparadas
      */
-    public int calcular(String primeiraString, String segundaString) {
+	@Override
+    public int calcular(String primeiraPalavra, String segundaPalavra) {
+    	if (primeiraPalavra.length() == 0 && segundaPalavra.length() == 0) {
+			return -1;
+		}
+        if (primeiraPalavra.length() == 0) 
+        	return segundaPalavra.length();
+        if (segundaPalavra.length() == 0) 
+        	return primeiraPalavra.length();
 
-        // INFinite distance is the max possible distance
-        int maiorDistanciaPossivel = primeiraString.length() + segundaString.length();
+        // maior distância possível
+        int maiorDistanciaPossivel = primeiraPalavra.length() + segundaPalavra.length();
 
-        // Create and initialize the character array indices
+        // cria e inicializa uma tabela dos índices dos caracteres
         HashMap<Character, Integer> indicesDosCaracteres = new HashMap<Character, Integer>();
+        
         int i;
         
-        for (i = 0; i < primeiraString.length(); i++) {
-            if (!indicesDosCaracteres.containsKey(primeiraString.charAt(i))) {
-                indicesDosCaracteres.put(primeiraString.charAt(i), 0);
+        for (i = 0; i < primeiraPalavra.length(); i++) {
+            if (!indicesDosCaracteres.containsKey(primeiraPalavra.charAt(i))) {
+                indicesDosCaracteres.put(primeiraPalavra.charAt(i), 0);
             }
         }
 
-        for (i = 0; i < segundaString.length(); i++) {
-            if (!indicesDosCaracteres.containsKey(segundaString.charAt(i))) {
-                indicesDosCaracteres.put(segundaString.charAt(i), 0);
+        for (i = 0; i < segundaPalavra.length(); i++) {
+            if (!indicesDosCaracteres.containsKey(segundaPalavra.charAt(i))) {
+                indicesDosCaracteres.put(segundaPalavra.charAt(i), 0);
             }
         }
 
-        // Create the distance matrix H[0 .. s1.length+1][0 .. s2.length+1]
-        int[][] h = new int[primeiraString.length() + 2][segundaString.length() + 2];
+        // cria a matriz de distância 
+        int[][] matrizDeDistancias = new int[primeiraPalavra.length() + 2][segundaPalavra.length() + 2];
 
-        // initialize the left and top edges of H
-        for (i = 0; i <= primeiraString.length(); i++) {
-            h[i + 1][0] = maiorDistanciaPossivel;
-            h[i + 1][1] = i;
+        // preenche as bordas da matriz 
+        for (i = 0; i <= primeiraPalavra.length(); i++) {
+            matrizDeDistancias[i + 1][0] = maiorDistanciaPossivel;
+            matrizDeDistancias[i + 1][1] = i;
         }
 
-        for (i = 0; i <= segundaString.length(); i++) {
-            h[0][i + 1] = maiorDistanciaPossivel;
-            h[1][i + 1] = i;
+        for (i = 0; i <= segundaPalavra.length(); i++) {
+            matrizDeDistancias[0][i + 1] = maiorDistanciaPossivel;
+            matrizDeDistancias[1][i + 1] = i;
 
         }
 
-        // fill in the distance matrix H
-        // look at each character in s1
-        for (i = 1; i <= primeiraString.length(); i++) {
+        // preenche a matriz de distância
+        // passa por cada char da primeiraPalavra
+        for (i = 1; i <= primeiraPalavra.length(); i++) {
             int db = 0;
 
-            // look at each character in b
-            for (int j = 1; j <= segundaString.length(); j++) {
-                int i1 = indicesDosCaracteres.get(segundaString.charAt(j - 1));
+            // passa por cada char da segundaPalavra
+            for (int j = 1; j <= segundaPalavra.length(); j++) {
+                int i1 = indicesDosCaracteres.get(segundaPalavra.charAt(j - 1));
                 int j1 = db;
 
-                int cost = 1;
-                if (primeiraString.charAt(i - 1) == segundaString.charAt(j - 1)) {
-                    cost = 0;
+                int custo = 1;
+                if (primeiraPalavra.charAt(i - 1) == segundaPalavra.charAt(j - 1)) {
+                    custo = 0;
                     db = j;
                 }
 
-                h[i + 1][j + 1] = 
+                matrizDeDistancias[i + 1][j + 1] = 
         		Math.min(
             		minimo(
-                        h[i][j] + cost, // substitution
-                        h[i + 1][j] + 1, // insertion
-                        h[i][j + 1] + 1) // deletion
-                    ,h[i1][j1] + (i - i1 - 1) + 1 + (j - j1 - 1)
+                        matrizDeDistancias[i][j] + custo, // substituição
+                        matrizDeDistancias[i + 1][j] + 1, // inserção
+                        matrizDeDistancias[i][j + 1] + 1) // remoção
+                    ,matrizDeDistancias[i1][j1] + (i - i1 - 1) + 1 + (j - j1 - 1)
                 );
                 
                 
             }
 
-            indicesDosCaracteres.put(primeiraString.charAt(i - 1), i);
+            indicesDosCaracteres.put(primeiraPalavra.charAt(i - 1), i);
         }
 
-        return h[primeiraString.length() + 1][segundaString.length() + 1];
+        return matrizDeDistancias[primeiraPalavra.length() + 1][segundaPalavra.length() + 1];
     }
 
 }

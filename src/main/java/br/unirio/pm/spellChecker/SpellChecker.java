@@ -23,10 +23,10 @@ public class SpellChecker {
 	private final int CODIGO_LEVENSHTEIN = 1;
 	private final int CODIGO_DAMERAU_LEVENSHTEIN = 2;
 	
+	/**
+	 * Construtor da classe
+	 */
     public SpellChecker(int codigoCalculador, String nomeTeclado) {
-    	
-        
-        
     	
     	TiposDeTeclado tiposDeTeclado = new TiposDeTeclado();
     	Teclado teclado = tiposDeTeclado.getTecladoByName(nomeTeclado);
@@ -44,6 +44,7 @@ public class SpellChecker {
     	LeitorDePalavras leitorDePalavras = new LeitorDePalavras();
         leitorDePalavras.gerarDicionario(dicionarioDePalavras);
     }
+    
     
 	/**
 	 * Busca palavras similares a uma palavra respeitando um limite de operacoes

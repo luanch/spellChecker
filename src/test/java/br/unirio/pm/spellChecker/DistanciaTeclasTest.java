@@ -42,58 +42,58 @@ public class DistanciaTeclasTest {
 		teclado.prepararTeclado();
 		
 		
-		assertEquals(dist(0.5, 1), teclado.getDistancias('q', 'a'), 0.001);
-		assertEquals(dist(0.5, 1), teclado.getDistancias('a', 'q'), 0.001);
+		assertEquals(dist(0.5, 1), teclado.getDistancia('q', 'a'), 0.001);
+		assertEquals(dist(0.5, 1), teclado.getDistancia('a', 'q'), 0.001);
 
-		assertEquals(dist(1.5, 1), teclado.getDistancias('q', 's'), 0.001);
-		assertEquals(dist(1.5, 1), teclado.getDistancias('s', 'q'), 0.001);
+		assertEquals(dist(1.5, 1), teclado.getDistancia('q', 's'), 0.001);
+		assertEquals(dist(1.5, 1), teclado.getDistancia('s', 'q'), 0.001);
 
-		assertEquals(dist(8.5, 1), teclado.getDistancias('q', 'l'), 0.001);
-		assertEquals(dist(8.5, 1), teclado.getDistancias('l', 'q'), 0.001);
+		assertEquals(dist(8.5, 1), teclado.getDistancia('q', 'l'), 0.001);
+		assertEquals(dist(8.5, 1), teclado.getDistancia('l', 'q'), 0.001);
 
-		assertEquals(dist(1.0, 2), teclado.getDistancias('q', 'z'), 0.001);
-		assertEquals(dist(1.0, 2), teclado.getDistancias('z', 'q'), 0.001);
+		assertEquals(dist(1.0, 2), teclado.getDistancia('q', 'z'), 0.001);
+		assertEquals(dist(1.0, 2), teclado.getDistancia('z', 'q'), 0.001);
 
-		assertEquals(dist(2.0, 2), teclado.getDistancias('q', 'x'), 0.001);
-		assertEquals(dist(2.0, 2), teclado.getDistancias('x', 'q'), 0.001);
+		assertEquals(dist(2.0, 2), teclado.getDistancia('q', 'x'), 0.001);
+		assertEquals(dist(2.0, 2), teclado.getDistancia('x', 'q'), 0.001);
 
-		assertEquals(dist(7.0, 2), teclado.getDistancias('q', 'm'), 0.001);
-		assertEquals(dist(7.0, 2), teclado.getDistancias('m', 'q'), 0.001);
+		assertEquals(dist(7.0, 2), teclado.getDistancia('q', 'm'), 0.001);
+		assertEquals(dist(7.0, 2), teclado.getDistancia('m', 'q'), 0.001);
 
 		
 		
 		
 		
 		
-		assertEquals(dist(0.5, 1), teclado.getDistancias('w', 'a'), 0.001);
-		assertEquals(dist(0.5, 1), teclado.getDistancias('a', 'w'), 0.001);
+		assertEquals(dist(0.5, 1), teclado.getDistancia('w', 'a'), 0.001);
+		assertEquals(dist(0.5, 1), teclado.getDistancia('a', 'w'), 0.001);
 
-		assertEquals(dist(0.5, 1), teclado.getDistancias('w', 's'), 0.001);
-		assertEquals(dist(0.5, 1), teclado.getDistancias('s', 'w'), 0.001);
+		assertEquals(dist(0.5, 1), teclado.getDistancia('w', 's'), 0.001);
+		assertEquals(dist(0.5, 1), teclado.getDistancia('s', 'w'), 0.001);
 
-		assertEquals(dist(0.0, 2), teclado.getDistancias('w', 'z'), 0.001);
-		assertEquals(dist(0.0, 2), teclado.getDistancias('z', 'w'), 0.001);
+		assertEquals(dist(0.0, 2), teclado.getDistancia('w', 'z'), 0.001);
+		assertEquals(dist(0.0, 2), teclado.getDistancia('z', 'w'), 0.001);
 
-		assertEquals(dist(0.5, 1), teclado.getDistancias('a', 'z'), 0.001);
-		assertEquals(dist(0.5, 1), teclado.getDistancias('z', 'a'), 0.001);
+		assertEquals(dist(0.5, 1), teclado.getDistancia('a', 'z'), 0.001);
+		assertEquals(dist(0.5, 1), teclado.getDistancia('z', 'a'), 0.001);
 
-		assertEquals(dist(8.0, 2), teclado.getDistancias('p', 'z'), 0.001);
-		assertEquals(dist(8.0, 2), teclado.getDistancias('z', 'p'), 0.001);
+		assertEquals(dist(8.0, 2), teclado.getDistancia('p', 'z'), 0.001);
+		assertEquals(dist(8.0, 2), teclado.getDistancia('z', 'p'), 0.001);
 
-		assertEquals(dist(0.5, 1), teclado.getDistancias('g', 't'), 0.001);
-		assertEquals(dist(1.5, 1), teclado.getDistancias('a', 'e'), 0.001);
-		assertEquals(dist(1.0, 0),  teclado.getDistancias('b', 'v'), 0.001);
+		assertEquals(dist(0.5, 1), teclado.getDistancia('g', 't'), 0.001);
+		assertEquals(dist(1.5, 1), teclado.getDistancia('a', 'e'), 0.001);
+		assertEquals(dist(1.0, 0),  teclado.getDistancia('b', 'v'), 0.001);
 		
 		
-		assertEquals(dist(0,0), teclado.getDistancias('a', 'a'), 0.001);
+		assertEquals(dist(0,0), teclado.getDistancia('a', 'a'), 0.001);
 		
-		assertEquals(dist(1,0), teclado.getDistancias('a', 's'), 0.001);
-		assertEquals(dist(1,0), teclado.getDistancias('s', 'a'), 0.001);
+		assertEquals(dist(1,0), teclado.getDistancia('a', 's'), 0.001);
+		assertEquals(dist(1,0), teclado.getDistancia('s', 'a'), 0.001);
 		
-		assertEquals(dist(0,0), teclado.getDistancias('x', 'x'), 0.001);
+		assertEquals(dist(0,0), teclado.getDistancia('x', 'x'), 0.001);
 		
-		assertEquals(dist(0,4), teclado.getDistancias('c', 'm'), 0.001);
-		assertEquals(dist(0,4), teclado.getDistancias('m', 'c'), 0.001);
+		assertEquals(dist(0,4), teclado.getDistancia('c', 'm'), 0.001);
+		assertEquals(dist(0,4), teclado.getDistancia('m', 'c'), 0.001);
 		
 		
 		

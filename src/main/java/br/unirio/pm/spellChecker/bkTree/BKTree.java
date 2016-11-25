@@ -9,8 +9,10 @@ import br.unirio.pm.spellChecker.calculadoresDeDistancia.DistanciaDeDamerauLeven
 import br.unirio.pm.spellChecker.calculadoresDeDistancia.DistanciaDeLevenshtein;
 import br.unirio.pm.spellChecker.calculadoresDeDistancia.MoldeDeCalculadorDeDistanciaEntreStrings;
 
+/**
+ * Classe que monta a BK tree levando em consideração qual calculador será usado
+ */
 public class BKTree {
-	
     private Node raiz;
     private final int CODIGO_LEVENSHTEIN = 1;
 	private final int CODIGO_DAMERAU_LEVENSHTEIN = 2;
@@ -72,6 +74,9 @@ public class BKTree {
         return resultadoDaBusca;
     }
  
+    /**
+     * Método auxiliar ao anterior, busca uma palavra na árvore e retorna se achou ou não
+     */
     private boolean buscar(Node node, List<String> resultadoDaBusca, String palavra, int limiteDeOperacoes ){
         String palavraModificada = normalizarPalavra(palavra);	
     	int distanciaAtual = calculador.calcular(node.palavra, palavraModificada);
@@ -98,6 +103,9 @@ public class BKTree {
         return false;
     }
     
+    /**
+     * Retorna true caso a palavra exista na árvore e false caso contrário
+     */
     public boolean contem(String palavra) {
     	if (raiz == null) 
     		return false;
@@ -105,6 +113,9 @@ public class BKTree {
     	return buscar(raiz, resultadoDaBusca , palavra, 0);
     }
     
+    /**
+     * Calcula a distância entre duas palavras
+     */
 	public int calcular (String primeiraPalavra, String segundaPalavra){
 		return calculador.calcular(primeiraPalavra, segundaPalavra);
 	}
@@ -117,6 +128,10 @@ public class BKTree {
 		return CODIGO_DAMERAU_LEVENSHTEIN;
 	}
 	
+	/**
+	 * Põe a palavra nos moldes definidos
+	 * Letra maiúscula, sem espaços e sem hifens
+	 */
 	private String normalizarPalavra(String palavra){
         String palavraModificada = palavra.toUpperCase();
         palavraModificada = palavraModificada.trim();

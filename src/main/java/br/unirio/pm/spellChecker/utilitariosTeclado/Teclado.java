@@ -6,21 +6,24 @@ import br.unirio.pm.spellChecker.calculadoresDeDistancia.DistanciaEntreTeclas;
 import lombok.Getter;
 import lombok.Setter;
 
-
+/**
+ * Classe que representa um teclado
+ * Um teclado possui n linhas, um nome e uma matriz padrão de distâncias entre todas as letras
+ */
 public class Teclado {
-	private @Getter ArrayList<Linha> designTeclado;
+	private @Getter ArrayList<Linha> linhasDoTeclado;
 	private @Getter @Setter String nome;
 	private double[][] distancias;
 
 	public void adicionarLinha(Linha linha){
-		designTeclado.add(linha);
+		linhasDoTeclado.add(linha);
 	}
 	
 	public Teclado () {
-		designTeclado = new ArrayList<Linha>();
+		linhasDoTeclado = new ArrayList<Linha>();
 	}
 	
-	public double getDistancias(char letraInicial, char letraFinal){
+	public double getDistancia(char letraInicial, char letraFinal){
 		letraInicial = Character.toUpperCase(letraInicial);
 		letraFinal = Character.toUpperCase(letraFinal);
 		

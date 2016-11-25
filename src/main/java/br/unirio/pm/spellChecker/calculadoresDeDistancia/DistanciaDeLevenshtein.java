@@ -52,11 +52,6 @@ public class DistanciaDeLevenshtein extends MoldeDeCalculadorDeDistanciaEntreStr
             	else {
             		letrasDiferentes = 1;
             	}
-//            	  h[i + 1][j + 1] = minimo(
-//                          h[i][j] + cost, // substitution
-//                          h[i + 1][j] + 1, // insertion
-//                          h[i][j + 1] + 1, // deletion
-//                          h[i1][j1] + (i - i1 - 1) + 1 + (j - j1 - 1));
 
             	// adiciona na matriz o menor valor dentre os vizinhos anteriores (lado, cima e diagonal esquerda)
                 matrizDeLevenshtein[i][j] = 
