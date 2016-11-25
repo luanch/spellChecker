@@ -9,7 +9,7 @@ public class DistanciaDeLevenshtein extends MoldeDeCalculadorDeDistanciaEntreStr
 	
 	
 	public DistanciaDeLevenshtein(Teclado teclado) {
-		this.teclado = teclado;
+		this.teclado = teclado;	
 	}
 	
 	/**
@@ -28,7 +28,7 @@ public class DistanciaDeLevenshtein extends MoldeDeCalculadorDeDistanciaEntreStr
         int tamanhoDaPrimeiraPalavra = primeiraPalavra.length();
         int tamanhoDaSegundaPalavra = segundaPalavra.length();
  
-        int[][] matrizDeLevenshtein = new int[tamanhoDaPrimeiraPalavra + 1][tamanhoDaSegundaPalavra + 1];
+        double[][] matrizDeLevenshtein = new double[tamanhoDaPrimeiraPalavra + 1][tamanhoDaSegundaPalavra + 1];
         
         // preenche a primeira linha e coluna com o valor corrente
         for (int i = 0; i <= tamanhoDaPrimeiraPalavra; i++)
@@ -44,25 +44,22 @@ public class DistanciaDeLevenshtein extends MoldeDeCalculadorDeDistanciaEntreStr
             for (int j = 1; j <= tamanhoDaSegundaPalavra; j++)
             {
             	// caso as letras da linha e coluna sejam diferentes, adiciona-se 1 ao valor da posicao da matriz
-            	int letrasDiferentes;
-            	
-            	if (primeiraPalavra.charAt(i - 1) == segundaPalavra.charAt(j - 1)) {
-            		letrasDiferentes = 0;
-            	}
-            	else {
-            		letrasDiferentes = 1;
-            	}
+            	char letraPrimeiraPalavra = primeiraPalavra.charAt(i - 1);
+            	char letraSegundaPalavra = segundaPalavra.charAt(j - 1);
+            	double distanciaEntreLetras = teclado.getDistancia(letraPrimeiraPalavra, letraSegundaPalavra);
+
 
             	// adiciona na matriz o menor valor dentre os vizinhos anteriores (lado, cima e diagonal esquerda)
                 matrizDeLevenshtein[i][j] = 
-                		minimo(matrizDeLevenshtein[i - 1][j] + 1,
-                				matrizDeLevenshtein[i][j - 1] + 1,
-                				matrizDeLevenshtein[i - 1][j - 1]
-						) + letrasDiferentes;
+                		minimo(matrizDeLevenshtein[i - 1][j] + teclado.getCustoInsercaoRemocao(),
+                				matrizDeLevenshtein[i][j - 1] + teclado.getCustoInsercaoRemocao(),
+                				matrizDeLevenshtein[i - 1][j - 1] + distanciaEntreLetras
+						);
             }
         }
         
         //o ultimo elemento da matriz eh a distancia minima
-        return matrizDeLevenshtein[tamanhoDaPrimeiraPalavra][tamanhoDaSegundaPalavra];
-    }
+        int retorno = (int) Math.round(matrizDeLevenshtein[tamanhoDaPrimeiraPalavra][tamanhoDaSegundaPalavra]*100);
+        return retorno;
+	}
 }

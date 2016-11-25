@@ -52,7 +52,7 @@ public class DistanciaDeDamerauLevenshtein extends MoldeDeCalculadorDeDistanciaE
         }
 
         // cria a matriz de distância 
-        int[][] matrizDeDistancias = new int[primeiraPalavra.length() + 2][segundaPalavra.length() + 2];
+        double[][] matrizDeDistancias = new double[primeiraPalavra.length() + 2][segundaPalavra.length() + 2];
 
         // preenche as bordas da matriz 
         for (i = 0; i <= primeiraPalavra.length(); i++) {
@@ -76,18 +76,17 @@ public class DistanciaDeDamerauLevenshtein extends MoldeDeCalculadorDeDistanciaE
                 int i1 = indicesDosCaracteres.get(segundaPalavra.charAt(j - 1));
                 int j1 = db;
 
-                int custo = 1;
-                if (primeiraPalavra.charAt(i - 1) == segundaPalavra.charAt(j - 1)) {
-                    custo = 0;
-                    db = j;
-                }
+                
+                char letraPrimeiraPalavra = primeiraPalavra.charAt(i - 1);
+                char letraSegundaPalavra = segundaPalavra.charAt(j - 1);
+                double custo =  teclado.getDistancia(letraPrimeiraPalavra, letraSegundaPalavra);
 
                 matrizDeDistancias[i + 1][j + 1] = 
         		Math.min(
             		minimo(
                         matrizDeDistancias[i][j] + custo, // substituição
-                        matrizDeDistancias[i + 1][j] + 1, // inserção
-                        matrizDeDistancias[i][j + 1] + 1) // remoção
+                        matrizDeDistancias[i + 1][j] + teclado.getCustoInsercaoRemocao(), // inserção
+                        matrizDeDistancias[i][j + 1] + teclado.getCustoInsercaoRemocao()) // remoção
                     ,matrizDeDistancias[i1][j1] + (i - i1 - 1) + 1 + (j - j1 - 1)
                 );
                 
@@ -97,7 +96,7 @@ public class DistanciaDeDamerauLevenshtein extends MoldeDeCalculadorDeDistanciaE
             indicesDosCaracteres.put(primeiraPalavra.charAt(i - 1), i);
         }
 
-        return matrizDeDistancias[primeiraPalavra.length() + 1][segundaPalavra.length() + 1];
+        return (int) Math.round(matrizDeDistancias[primeiraPalavra.length() + 1][segundaPalavra.length() + 1]*100);
     }
 
 }

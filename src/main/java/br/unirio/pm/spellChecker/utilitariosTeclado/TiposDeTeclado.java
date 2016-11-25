@@ -29,4 +29,10 @@ public class TiposDeTeclado {
 	public ArrayList<Teclado> getTeclados(){
 		return teclados;
 	}
+	
+	public Teclado getTecladoNeutro(){
+		boolean neutro = true;
+		Teclado teclado = new Teclado(neutro);
+		return teclado;
+	}
 }

@@ -67,7 +67,7 @@ public class BKTree {
     public List<String> buscar(String palavra, int limiteDeOperacoes){
         List<String> resultadoDaBusca = new ArrayList<String>();
         	
-        if((palavra != null) && (palavra != "")){
+        if((palavra != null) && (!palavra.equals("")) ){
 
         	buscar(raiz, resultadoDaBusca, palavra, limiteDeOperacoes);
         }
@@ -78,7 +78,7 @@ public class BKTree {
      * Método auxiliar ao anterior, busca uma palavra na árvore e retorna se achou ou não
      */
     private boolean buscar(Node node, List<String> resultadoDaBusca, String palavra, int limiteDeOperacoes ){
-        String palavraModificada = normalizarPalavra(palavra);	
+        String palavraModificada = normalizarPalavra(palavra);
     	int distanciaAtual = calculador.calcular(node.palavra, palavraModificada);
         
         // seguindo o algoritmo da bk-tree, busca-se apenas palavras entre limite-1 e limite+1

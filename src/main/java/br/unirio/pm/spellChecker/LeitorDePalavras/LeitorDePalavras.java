@@ -29,7 +29,7 @@ public class LeitorDePalavras {
 				
 				// aqui pode dar a excessao
 				palavra = leitorDeDicionario.readLine();
-				while(palavra != null){
+				while(palavra != null){ // TÁ DANDO MERDA AQUI DENTRO
 					arvore.inserir(palavra);
 					palavra = leitorDeDicionario.readLine(); 
 				}

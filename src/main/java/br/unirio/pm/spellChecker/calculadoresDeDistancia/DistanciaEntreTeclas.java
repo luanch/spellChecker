@@ -32,7 +32,7 @@ public class DistanciaEntreTeclas {
 		if (!Character.isLetter(letraInicial) || !Character.isLetter(letraFinal)) {
 			return distancia;
 		}
-		ArrayList<Linha> linhas = teclado.getDesignTeclado();
+		ArrayList<Linha> linhas = teclado.getLinhasDoTeclado();
 		
 		//armazenam as posicoes (indices) no teclado de cada letra
 		//[0] é à qual coluna pertence, [1] é à qual linha

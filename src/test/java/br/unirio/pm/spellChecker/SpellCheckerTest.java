@@ -31,7 +31,6 @@ public class SpellCheckerTest{
 	
 	@BeforeClass
 	public static void inicializadorGeral(){
-		SpellChecker spellChecker;
 	}
 	
 	@Test
@@ -68,9 +67,11 @@ public class SpellCheckerTest{
 
 		
 		assertTrue(spellChecker.verificarPalavra("casaz", 3).contains("CASA"));
+	
+		
 		
 		assertTrue(spellChecker.verificarPalavra("paralelepipewwe", 4).contains("PARALELEPIPEDO"));
-		assertTrue(spellChecker.verificarPalavra("paralelepipedoe", 1).contains("PARALELEPIPEDO"));
+		assertTrue(spellChecker.verificarPalavra("casae", 1).contains("casa".toUpperCase()));
 		
 		
 		assertFalse(spellChecker.verificarPalavra("zurrarer", 1).contains("ZURRAR"));
@@ -80,36 +81,12 @@ public class SpellCheckerTest{
 	@Test
 	public void testLetraFaltandoLevenshtein(){
 		spellChecker = new SpellChecker(1, "QWERTY");
-
 		
 		assertTrue(spellChecker.verificarPalavra("feramenta", 1).contains("FERRAMENTA"));
-		
+		assertTrue(spellChecker.verificarPalavra("ferrament", 1).contains("FERRAMENTA"));
+
 		assertFalse(spellChecker.verificarPalavra("zura", 1).contains("ZURRAR"));
 		
 	}
-		/*
-//		assertEquals(new String[]{"casa"},spellChecker.checarOrtografia("casal"));
-//		assertEquals(new String[]{"casa"},spellChecker.checarOrtografia("cas"));
-//		assertEquals(new String[]{"casa"},spellChecker.checarOrtografia("caas"));
-//		assertEquals(new String[]{"casa"},spellChecker.checarOrtografia("csa"));
-//		assertEquals(null,spellChecker.checarOrtografia(""));
-//		assertEquals(new String[]{},spellChecker.checarOrtografia("Ola"));
-//		assertEquals(new String[]{"oi"},spellChecker.checarOrtografia("oie"));
-//	}
-//
-//	public void testLevenshteinDistance(){
-//		limitedCompare(null, *, *)             = IllegalArgumentException
-//			     * limitedCompare(*, null, *)             = IllegalArgumentException
-//			     * limitedCompare(*, *, -1)               = IllegalArgumentException
-//			     * limitedCompare("","", 0)               = 0
-//			     * limitedCompare("aaapppp", "", 8)       = 7
-//			     * limitedCompare("aaapppp", "", 7)       = 7
-//			     * limitedCompare("aaapppp", "", 6))      = -1
-//			     * limitedCompare("elephant", "hippo", 7) = 7
-//			     * limitedCompare("elephant", "hippo", 6) = -1
-//			     * limitedCompare("hippo", "elephant", 7) = 7
-//			     * limitedCompare("hippo", "elephant", 6) = -1
-//	}
-//	
-//	*/
+
 }

@@ -12,7 +12,7 @@ public abstract class MoldeDeCalculadorDeDistanciaEntreStrings {
     public abstract int calcular(String primeiraPalavra, String segundaPalavra);
     
 
-    protected int minimo(int a, int b, int c) {
+    protected double minimo(double a, double b, double c) {
         return Math.min(a, Math.min(b, c));
     }
 }
