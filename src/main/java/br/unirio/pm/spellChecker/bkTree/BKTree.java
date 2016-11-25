@@ -136,6 +136,10 @@ public class BKTree {
         String palavraModificada = palavra.toUpperCase();
         palavraModificada = palavraModificada.trim();
         palavraModificada = palavraModificada.replace("-", "");
+        palavraModificada = palavraModificada.replace("'", "");
+        palavraModificada = palavraModificada.replace(".", "");
+
+
         
         return palavraModificada;
 	}

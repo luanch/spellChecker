@@ -46,20 +46,30 @@ public class DistanciaDeLevenshtein extends MoldeDeCalculadorDeDistanciaEntreStr
             	// caso as letras da linha e coluna sejam diferentes, adiciona-se 1 ao valor da posicao da matriz
             	char letraPrimeiraPalavra = primeiraPalavra.charAt(i - 1);
             	char letraSegundaPalavra = segundaPalavra.charAt(j - 1);
+            	if (letraPrimeiraPalavra - 'A' < 0 || letraSegundaPalavra - 'A' < 0) {
+            		System.out.println("oi");
+            	}
+            			
             	double distanciaEntreLetras = teclado.getDistancia(letraPrimeiraPalavra, letraSegundaPalavra);
 
 
             	// adiciona na matriz o menor valor dentre os vizinhos anteriores (lado, cima e diagonal esquerda)
-                matrizDeLevenshtein[i][j] = 
+                /*matrizDeLevenshtein[i][j] = 
                 		minimo(matrizDeLevenshtein[i - 1][j] + teclado.getCustoInsercaoRemocao(),
                 				matrizDeLevenshtein[i][j - 1] + teclado.getCustoInsercaoRemocao(),
+                				matrizDeLevenshtein[i - 1][j - 1] + distanciaEntreLetras
+						);*/
+            	matrizDeLevenshtein[i][j] = 
+                		minimo(matrizDeLevenshtein[i - 1][j] + 1,
+                				matrizDeLevenshtein[i][j - 1] + 1,
                 				matrizDeLevenshtein[i - 1][j - 1] + distanciaEntreLetras
 						);
             }
         }
         
         //o ultimo elemento da matriz eh a distancia minima
-        int retorno = (int) Math.round(matrizDeLevenshtein[tamanhoDaPrimeiraPalavra][tamanhoDaSegundaPalavra]*100);
+        //COLOCAR * 100 AQUI ? ? ?
+        int retorno = (int) Math.round(matrizDeLevenshtein[tamanhoDaPrimeiraPalavra][tamanhoDaSegundaPalavra]);
         return retorno;
 	}
 }

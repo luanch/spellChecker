@@ -22,7 +22,7 @@ public class Teclado {
 	
 	public Teclado () {
 		linhasDoTeclado = new ArrayList<Linha>();
-		this.custoInsercaoRemocao = 2.5;
+		this.custoInsercaoRemocao = 1;
 	}
 	
 	public Teclado(boolean neutro){
@@ -43,6 +43,9 @@ public class Teclado {
 		letraInicial = Character.toUpperCase(letraInicial);
 		letraFinal = Character.toUpperCase(letraFinal);
 		
+		if ((letraInicial-'A' < 0) || (letraFinal-'A' < 0)) {
+			System.out.println("op");
+		}
 		return distancias[letraInicial-'A'][letraFinal-'A'];
 	}
 	
