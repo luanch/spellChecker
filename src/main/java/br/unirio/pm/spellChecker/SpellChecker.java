@@ -5,6 +5,7 @@ import java.util.List;
 
 import br.unirio.pm.spellChecker.LeitorDePalavras.LeitorDePalavras;
 import br.unirio.pm.spellChecker.bkTree.BKTree;
+import br.unirio.pm.spellChecker.calculadoresDeDistancia.CustoPalavra;
 import br.unirio.pm.spellChecker.calculadoresDeDistancia.DistanciaDeDamerauLevenshtein;
 import br.unirio.pm.spellChecker.calculadoresDeDistancia.DistanciaDeLevenshtein;
 import br.unirio.pm.spellChecker.calculadoresDeDistancia.MoldeDeCalculadorDeDistanciaEntreStrings;
@@ -18,7 +19,6 @@ import br.unirio.pm.spellChecker.utilitariosTeclado.TiposDeTeclado;
  */
 public class SpellChecker {
 	private BKTree dicionarioDePalavras;
-	private TiposDeTeclado tiposDeTeclado;
 
 	private final int CODIGO_LEVENSHTEIN = 1;
 	private final int CODIGO_DAMERAU_LEVENSHTEIN = 2;
@@ -50,13 +50,26 @@ public class SpellChecker {
 	 * Busca palavras similares a uma palavra respeitando um limite de operacoes
 	 * @param limiteDeOperacoes: quantidade maxima de operacoes que a palavra buscada pode sofrer
 	 */
-   public List<String> verificarPalavra(String palavra, int limiteDeOperacoes){
+   public ArrayList<String> verificarPalavra(String palavra, int limiteDeOperacoes){
        
-	   List<String> resultadoDaBusca = new ArrayList<String>();
-
-	   resultadoDaBusca =  dicionarioDePalavras.buscar(palavra, limiteDeOperacoes);
+	   ArrayList<CustoPalavra> arrayCustoPalavra = new ArrayList<CustoPalavra>();
+	   ArrayList<String> resultadoDaBusca = new ArrayList<String>();
+	   
+	   arrayCustoPalavra =  dicionarioDePalavras.buscar(palavra, limiteDeOperacoes*100);
+	   for (CustoPalavra custoPalavra: arrayCustoPalavra){
+		   resultadoDaBusca.add(custoPalavra.getPalavra());
+	   }
 	   
 	   return resultadoDaBusca;
+   }
+   
+   public ArrayList<CustoPalavra> verificarPalavraComErro(String palavra, int limiteDeOperacoes){
+	   ArrayList<CustoPalavra> arrayCustoPalavra = new ArrayList<CustoPalavra>();
+	   
+	   arrayCustoPalavra =  dicionarioDePalavras.buscar(palavra, limiteDeOperacoes*100);
+
+	   
+	   return arrayCustoPalavra;
    }
     
 

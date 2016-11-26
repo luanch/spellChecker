@@ -1,12 +1,10 @@
 package br.unirio.pm.spellChecker.bkTree;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
-import br.unirio.pm.spellChecker.LeitorDePalavras.LeitorDePalavras;
-import br.unirio.pm.spellChecker.calculadoresDeDistancia.DistanciaDeDamerauLevenshtein;
-import br.unirio.pm.spellChecker.calculadoresDeDistancia.DistanciaDeLevenshtein;
+import br.unirio.pm.spellChecker.calculadoresDeDistancia.CustoPalavra;
+import br.unirio.pm.spellChecker.calculadoresDeDistancia.InsertionSort;
 import br.unirio.pm.spellChecker.calculadoresDeDistancia.MoldeDeCalculadorDeDistanciaEntreStrings;
 
 /**
@@ -14,9 +12,10 @@ import br.unirio.pm.spellChecker.calculadoresDeDistancia.MoldeDeCalculadorDeDist
  */
 public class BKTree {
     private Node raiz;
+	private InsertionSort palavrasSugeridas;
     private final int CODIGO_LEVENSHTEIN = 1;
 	private final int CODIGO_DAMERAU_LEVENSHTEIN = 2;
-	
+
     
     // Aceita qualquer calculador de distancias entre string
     private MoldeDeCalculadorDeDistanciaEntreStrings calculador;
@@ -26,7 +25,7 @@ public class BKTree {
      * calculador de distancia será utilizado
      */
     public BKTree(MoldeDeCalculadorDeDistanciaEntreStrings calculador) {
-    	
+    	this.palavrasSugeridas = new InsertionSort();
     	this.calculador = calculador;
 	}
     
@@ -64,29 +63,31 @@ public class BKTree {
      * Busca palavras similares a uma palavra respeitando um limite de operacoes
      * @param limiteDeOperacoes: quantidade maxima de operacoes que a palavra buscada pode sofrer
      */
-    public List<String> buscar(String palavra, int limiteDeOperacoes){
-        List<String> resultadoDaBusca = new ArrayList<String>();
+    public ArrayList<CustoPalavra> buscar(String palavra, int limiteDeOperacoes){
         	
         if((palavra != null) && (!palavra.equals("")) ){
 
-        	buscar(raiz, resultadoDaBusca, palavra, limiteDeOperacoes);
+        	if(buscar(raiz, palavra, limiteDeOperacoes)){
+        		return null;
+        	}
         }
-        return resultadoDaBusca;
+        return palavrasSugeridas.getPalavrasSugeridas();
     }
  
     /**
      * Método auxiliar ao anterior, busca uma palavra na árvore e retorna se achou ou não
      */
-    private boolean buscar(Node node, List<String> resultadoDaBusca, String palavra, int limiteDeOperacoes ){
-        String palavraModificada = normalizarPalavra(palavra);
+    private boolean buscar(Node node, String palavra, int limiteDeOperacoes ){
+        
+    	String palavraModificada = normalizarPalavra(palavra);
     	int distanciaAtual = calculador.calcular(node.palavra, palavraModificada);
         
         // seguindo o algoritmo da bk-tree, busca-se apenas palavras entre limite-1 e limite+1
         int limiteMinimo = distanciaAtual - limiteDeOperacoes;
         int limiteMaximo = distanciaAtual + limiteDeOperacoes;
  
-        if ((distanciaAtual <= limiteDeOperacoes) && (distanciaAtual != 0)){ 
-            	resultadoDaBusca.add(node.palavra);
+        if ((distanciaAtual <= limiteDeOperacoes) && (distanciaAtual != 0)){
+        	palavrasSugeridas.adicionarPalavra(node.palavra, distanciaAtual);
         }
         else if (distanciaAtual == 0) {
         	return true;
@@ -96,7 +97,7 @@ public class BKTree {
         
         for (Integer chave : conjuntoDeChaves) {
         	if ((chave >= limiteMinimo) && (chave <= limiteMaximo)) {
-                if( buscar(node.getNodeFilho(chave), resultadoDaBusca, palavraModificada, limiteDeOperacoes))
+                if( buscar(node.getNodeFilho(chave), palavraModificada, limiteDeOperacoes))
                 	return true;
         	}
         }
@@ -109,8 +110,8 @@ public class BKTree {
     public boolean contem(String palavra) {
     	if (raiz == null) 
     		return false;
-        List<String> resultadoDaBusca = new ArrayList<String>();
-    	return buscar(raiz, resultadoDaBusca , palavra, 0);
+        ArrayList<String> resultadoDaBusca = new ArrayList<String>();
+    	return buscar(raiz, palavra, 0);
     }
     
     /**
@@ -127,6 +128,7 @@ public class BKTree {
 	public int getCodigoDamerauLevenshtein(){
 		return CODIGO_DAMERAU_LEVENSHTEIN;
 	}
+
 	
 	/**
 	 * Põe a palavra nos moldes definidos

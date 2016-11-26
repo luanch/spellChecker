@@ -15,6 +15,8 @@ public class Teclado {
 	private @Getter @Setter String nome;
 	private double[][] distancias;
 	private @Getter double custoInsercaoRemocao;
+	
+	private static final int QUANTIDADE_LETRAS_NO_ALFABETO = 26;
 
 	public void adicionarLinha(Linha linha){
 		linhasDoTeclado.add(linha);
@@ -22,13 +24,13 @@ public class Teclado {
 	
 	public Teclado () {
 		linhasDoTeclado = new ArrayList<Linha>();
-		this.custoInsercaoRemocao = 1;
+		this.custoInsercaoRemocao = 0.25;
 	}
 	
 	public Teclado(boolean neutro){
-		distancias = new double[26][26];
-		for(int i=0; i< 26; i++){
-			for(int j=0; j< 26; j++){
+		distancias = new double[QUANTIDADE_LETRAS_NO_ALFABETO][QUANTIDADE_LETRAS_NO_ALFABETO];
+		for(int i=0; i< QUANTIDADE_LETRAS_NO_ALFABETO; i++){
+			for(int j=0; j< QUANTIDADE_LETRAS_NO_ALFABETO; j++){
 				distancias[i][j] = 1;
 			}
 		}
@@ -50,16 +52,38 @@ public class Teclado {
 	}
 	
 	public void prepararTeclado(){
-		distancias = new double[26][26];
+		distancias = new double[QUANTIDADE_LETRAS_NO_ALFABETO][QUANTIDADE_LETRAS_NO_ALFABETO];
 		
 		DistanciaEntreTeclas distanciaEntreTeclas = new DistanciaEntreTeclas(this);
 		
 		String alfabeto = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 		char[] letrasDoAlfabeto = alfabeto.toCharArray();
-		for(int i = 0; i< letrasDoAlfabeto.length; i++){
-			for(int j = 0; j< letrasDoAlfabeto.length; j++){
-				distancias[letrasDoAlfabeto[i]-'A'][letrasDoAlfabeto[j]-'A'] = distanciaEntreTeclas.calcularDistancia(letrasDoAlfabeto[i], letrasDoAlfabeto[j]);
+		for(int i = 0; i< QUANTIDADE_LETRAS_NO_ALFABETO; i++){
+			for(int j = 0; j< QUANTIDADE_LETRAS_NO_ALFABETO; j++){
+				distancias[letrasDoAlfabeto[i]-'A'][letrasDoAlfabeto[j]-'A'] = 
+						(distanciaEntreTeclas.calcularDistancia(letrasDoAlfabeto[i],
+								letrasDoAlfabeto[j]));
 			}
 		}
+		
+		double distanciaMaximaEntreTeclas = distanciaMaximaEntreTeclas();
+		// Normaliza tudo, colocando a maior distancia do teclado com valor 1
+		for(int i = 0; i< letrasDoAlfabeto.length; i++){
+			for(int j = 0; j< letrasDoAlfabeto.length; j++){
+				distancias[i][j] = distancias[i][j]/distanciaMaximaEntreTeclas;
+			}
+		}
+			}
+	
+	private double distanciaMaximaEntreTeclas(){
+		double distanciaMaxima = Integer.MIN_VALUE;
+		for(int i = 0; i< QUANTIDADE_LETRAS_NO_ALFABETO; i++){
+			for(int j = 0; j< QUANTIDADE_LETRAS_NO_ALFABETO; j++){
+				if(distancias[i][j] > distanciaMaxima){
+					distanciaMaxima = distancias[i][j];
+				}
+			}
+		}
+		return distanciaMaxima;
 	}
 }
