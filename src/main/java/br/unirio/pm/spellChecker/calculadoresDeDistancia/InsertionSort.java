@@ -25,23 +25,29 @@ public class InsertionSort {
 				}
 			}
 			else{
-				for(int i = ultimoElemento - 1; i >= 0; i--){
-					if(distanciaAtual < palavrasSugeridas.get(i).getDistancia()){
-						inserirPalavraNoIndice(i, palavraCorrente);
+				int i;
+				for(i = ultimoElemento - 1; i >= 0; i--){
+					if(distanciaAtual > palavrasSugeridas.get(i).getDistancia()){
+						inserirPalavraNoIndice(i+1, palavraCorrente);
 						break;
 					}
+				}
+				if(i<0){
+					inserirPalavraNoIndice(0, palavraCorrente);
 				}
 			}
 		}
 	}
 	public void inserirPalavraNoIndice(int indice, CustoPalavra palavraCorrente){
-		palavrasSugeridas.set(indice, palavraCorrente);
 		CustoPalavra auxiliar;
-		for(int j = indice; j< palavrasSugeridas.size() && j < TAMANHO_ARRAY_MAX ;j++){
+		int j;
+		for(j = indice; j< palavrasSugeridas.size() && j < TAMANHO_ARRAY_MAX ;j++){
 			auxiliar = palavrasSugeridas.get(j);
 			palavrasSugeridas.set(j, palavraCorrente);
 			palavraCorrente = auxiliar;
 		}
+		if(palavrasSugeridas.size() < 10){
+			palavrasSugeridas.add(j, palavraCorrente);
+		}
 	}
-
 }

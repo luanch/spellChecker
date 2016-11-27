@@ -87,6 +87,8 @@ public class BKTree {
         int limiteMaximo = distanciaAtual + limiteDeOperacoes;
  
         if ((distanciaAtual <= limiteDeOperacoes) && (distanciaAtual != 0)){
+        	ArrayList<CustoPalavra> lista = palavrasSugeridas.getPalavrasSugeridas();
+			
         	palavrasSugeridas.adicionarPalavra(node.palavra, distanciaAtual);
         }
         else if (distanciaAtual == 0) {

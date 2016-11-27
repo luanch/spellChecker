@@ -34,60 +34,61 @@ public class SpellCheckerTest{
 	public static void inicializadorGeral(){
 	}
 	
-	@Test
-	public void testPalavraVaziaLevenshtein()
-	{
-		spellChecker = new SpellChecker(1, "QWERTY");
-		assertEquals(listaEsperada, spellChecker.verificarPalavra("", 4));
-		assertEquals(listaEsperada, spellChecker.verificarPalavra("", 1));
-		assertEquals(listaEsperada, spellChecker.verificarPalavra("", 0));
-		assertEquals(listaEsperada, spellChecker.verificarPalavra(null, 4));
-		assertEquals(listaEsperada, spellChecker.verificarPalavra(null, 0));
-		assertEquals(listaEsperada, spellChecker.verificarPalavra(null, 1));
-	}
-	
-	@Test
-	public void testLetraTrocadaLevenshtein(){
-		spellChecker = new SpellChecker(1, "QWERTY");
-
-		ArrayList<String> lista = spellChecker.verificarPalavra("fiera", 1);
-		boolean resp = lista.contains("FEIRA");
-		assertTrue(resp);
-		
-		assertTrue(spellChecker.verificarPalavra("csaa", 2).contains("CASA"));
-		
-		assertTrue(spellChecker.verificarPalavra("csaa-", 2).contains("CASA"));
-		
-		
-	}
-	
-	@Test
-	public void testLetraAMaisLevenshtein(){
-		spellChecker = new SpellChecker(1, "QWERTY");
-
-		
-		assertTrue(spellChecker.verificarPalavra("casaz", 3).contains("CASA"));
-	
-		
-		
-		assertTrue(spellChecker.verificarPalavra("paralelepipewwe", 4).contains("PARALELEPIPEDO"));
-		assertTrue(spellChecker.verificarPalavra("casae", 1).contains("casa".toUpperCase()));
-		
-		
-		assertFalse(spellChecker.verificarPalavra("zurrarer", 1).contains("ZURRAR"));
-	} 
-	
-
-	@Test
-	public void testLetraFaltandoLevenshtein(){
-		spellChecker = new SpellChecker(1, "QWERTY");
-		
-		assertTrue(spellChecker.verificarPalavra("feramenta", 1).contains("FERRAMENTA"));
-		assertTrue(spellChecker.verificarPalavra("ferrament", 1).contains("FERRAMENTA"));
-
-		assertFalse(spellChecker.verificarPalavra("zura", 1).contains("ZURRAR"));
-		
-	}
+//	@Test
+//	public void testPalavraVaziaLevenshtein()
+//	{
+//		spellChecker = new SpellChecker(1, "QWERTY");
+//		assertEquals(listaEsperada, spellChecker.verificarPalavra("", 4));
+//		assertEquals(listaEsperada, spellChecker.verificarPalavra("", 1));
+//		assertEquals(listaEsperada, spellChecker.verificarPalavra("", 0));
+//		assertEquals(listaEsperada, spellChecker.verificarPalavra(null, 4));
+//		assertEquals(listaEsperada, spellChecker.verificarPalavra(null, 0));
+//		assertEquals(listaEsperada, spellChecker.verificarPalavra(null, 1));
+//	}
+//	
+//	@Test
+//	public void testLetraTrocadaLevenshtein(){
+//		spellChecker = new SpellChecker(1, "QWERTY");
+//
+//		ArrayList<String> lista = spellChecker.verificarPalavra("fiera", 1);
+//		boolean resp = lista.contains("FEIRA");
+//		assertTrue(resp);
+//		
+//		assertTrue(spellChecker.verificarPalavra("csaa", 2).contains("CASA"));
+//		
+//		assertTrue(spellChecker.verificarPalavra("csaa-", 2).contains("CASA"));
+//		
+//		
+//	}
+//	
+//	@Test
+//	public void testLetraAMaisLevenshtein(){
+//		spellChecker = new SpellChecker(1, "QWERTY");
+//
+//		
+//		assertTrue(spellChecker.verificarPalavra("casaz", 3).contains("CASA"));
+//	
+//		
+//		
+//		assertTrue(spellChecker.verificarPalavra("paralelepipewwe", 4).contains("PARALELEPIPEDO"));
+//		assertTrue(spellChecker.verificarPalavra("casae", 1).contains("casa".toUpperCase()));
+//		
+//		
+//		assertFalse(spellChecker.verificarPalavra("zurrarer", 1).contains("ZURRAR"));
+//	} 
+//	
+//
+//	@Test
+//	public void testLetraFaltandoLevenshtein(){
+//		spellChecker = new SpellChecker(1, "QWERTY");
+//		
+//		assertTrue(spellChecker.verificarPalavra("feramenta", 1).contains("FERRAMENTA"));
+//		assertTrue(spellChecker.verificarPalavra("ferrament", 1).contains("FERRAMENTA"));
+//
+//		assertFalse(spellChecker.verificarPalavra("zura", 1).contains("ZURRAR"));
+//		
+//	}
+	// COMENTADO AGORA
 	
 	@Test
 	public void testSubstituicaoLevenshtein(){
@@ -120,28 +121,28 @@ public class SpellCheckerTest{
 		
 		
 		
-		ArrayList<CustoPalavra> lista2 = spellChecker.verificarPalavraComErro("ferramrnta", 1);
-		
-		
-		ArrayList<String> palavras = new ArrayList<String>();
-		ArrayList<Integer> custos = new ArrayList<Integer>();
-		   for (CustoPalavra custoPalavra: lista2){
-			   palavras.add(custoPalavra.getPalavra());
-			   custos.add(custoPalavra.getDistancia());
-		   }
-		
-		
-		boolean resp2 = lista.contains("FERRAMENTA");
-		System.out.println(palavras);		
-		System.out.println(custos);
-
-		assertTrue(resp2);
-		
-		
-		assertTrue(spellChecker.verificarPalavra("ferramenfa", 1).contains("FERRAMENTA"));
-
-		assertFalse(spellChecker.verificarPalavra("zurfa", 1).contains("ZURRAR"));
-		
+//		ArrayList<CustoPalavra> lista2 = spellChecker.verificarPalavraComErro("ferramrnta", 1);
+//		
+//		
+//		ArrayList<String> palavras = new ArrayList<String>();
+//		ArrayList<Integer> custos = new ArrayList<Integer>();
+//		   for (CustoPalavra custoPalavra: lista2){
+//			   palavras.add(custoPalavra.getPalavra());
+//			   custos.add(custoPalavra.getDistancia());
+//		   }
+//		
+//		
+//		boolean resp2 = lista.contains("FERRAMENTA");
+//		System.out.println(palavras);		
+//		System.out.println(custos);
+//
+//		assertTrue(resp2);
+//		
+//		
+//		assertTrue(spellChecker.verificarPalavra("ferramenfa", 1).contains("FERRAMENTA"));
+//
+//		assertFalse(spellChecker.verificarPalavra("zurfa", 1).contains("ZURRAR"));
+//		
 	}
 
 }
