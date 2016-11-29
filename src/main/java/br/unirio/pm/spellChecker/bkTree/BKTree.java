@@ -3,7 +3,7 @@ package br.unirio.pm.spellChecker.bkTree;
 import java.util.ArrayList;
 import java.util.Set;
 
-import br.unirio.pm.spellChecker.calculadoresDeDistancia.CustoPalavra;
+import br.unirio.pm.spellChecker.calculadoresDeDistancia.PalavraComCusto;
 import br.unirio.pm.spellChecker.calculadoresDeDistancia.InsertionSort;
 import br.unirio.pm.spellChecker.calculadoresDeDistancia.MoldeDeCalculadorDeDistanciaEntreStrings;
 
@@ -63,13 +63,10 @@ public class BKTree {
      * Busca palavras similares a uma palavra respeitando um limite de operacoes
      * @param limiteDeOperacoes: quantidade maxima de operacoes que a palavra buscada pode sofrer
      */
-    public ArrayList<CustoPalavra> buscar(String palavra, int limiteDeOperacoes){
-        	
+    public ArrayList<PalavraComCusto> buscar(String palavra, int limiteDeOperacoes){
+    	palavrasSugeridas = new InsertionSort();	
         if((palavra != null) && (!palavra.equals("")) ){
-
-        	if(buscar(raiz, palavra, limiteDeOperacoes)){
-        		return null;
-        	}
+        	buscar(raiz, palavra, limiteDeOperacoes);
         }
         return palavrasSugeridas.getPalavrasSugeridas();
     }
@@ -77,8 +74,11 @@ public class BKTree {
     /**
      * Método auxiliar ao anterior, busca uma palavra na árvore e retorna se achou ou não
      */
-    private boolean buscar(Node node, String palavra, int limiteDeOperacoes ){
-        
+    private void buscar(Node node, String palavra, int limiteDeOperacoes ){
+    	if (palavra.equals("casa") || palavra.equals("CASA")) {
+    		System.out.println(" oi");
+    	}
+      
     	String palavraModificada = normalizarPalavra(palavra);
     	int distanciaAtual = calculador.calcular(node.palavra, palavraModificada);
         
@@ -86,34 +86,45 @@ public class BKTree {
         int limiteMinimo = distanciaAtual - limiteDeOperacoes;
         int limiteMaximo = distanciaAtual + limiteDeOperacoes;
  
-        if ((distanciaAtual <= limiteDeOperacoes) && (distanciaAtual != 0)){
-        	ArrayList<CustoPalavra> lista = palavrasSugeridas.getPalavrasSugeridas();
-			
+        if ((distanciaAtual <= limiteDeOperacoes)){
         	palavrasSugeridas.adicionarPalavra(node.palavra, distanciaAtual);
         }
-        else if (distanciaAtual == 0) {
+        Set<Integer> conjuntoDeChaves = node.getChaves();
+        
+        for (Integer chave : conjuntoDeChaves) {
+        	if ((chave >= limiteMinimo) && (chave <= limiteMaximo)) {
+               buscar(node.getNodeFilho(chave), palavraModificada, limiteDeOperacoes);
+               
+	        }
+	    }
+    }
+    
+    public boolean contem (String palavraBuscada) {
+    	String palavraModificada = normalizarPalavra(palavraBuscada);
+    	return contemNode(raiz, palavraModificada);
+    }
+
+    
+    
+    /**
+     * Retorna true caso a palavra exista na árvore e false caso contrário
+     */
+    public boolean contemNode (Node node, String palavraBuscada) {
+    	int distanciaAtual = calculador.calcular(node.palavra, palavraBuscada);
+ 
+        if (distanciaAtual == 0) {
         	return true;
         }
         
         Set<Integer> conjuntoDeChaves = node.getChaves();
         
         for (Integer chave : conjuntoDeChaves) {
-        	if ((chave >= limiteMinimo) && (chave <= limiteMaximo)) {
-                if( buscar(node.getNodeFilho(chave), palavraModificada, limiteDeOperacoes))
+        	if (chave == distanciaAtual) {
+                if(contemNode(node.getNodeFilho(chave), palavraBuscada))
                 	return true;
         	}
         }
         return false;
-    }
-    
-    /**
-     * Retorna true caso a palavra exista na árvore e false caso contrário
-     */
-    public boolean contem(String palavra) {
-    	if (raiz == null) 
-    		return false;
-        ArrayList<String> resultadoDaBusca = new ArrayList<String>();
-    	return buscar(raiz, palavra, 0);
     }
     
     /**

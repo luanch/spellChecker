@@ -5,14 +5,14 @@ import java.util.ArrayList;
 import lombok.Getter;
 
 public class InsertionSort {
-	private @Getter ArrayList<CustoPalavra> palavrasSugeridas;
+	private @Getter ArrayList<PalavraComCusto> palavrasSugeridas;
 	private static final int TAMANHO_ARRAY_MAX = 10;
 	
 	public InsertionSort(){
-		palavrasSugeridas = new ArrayList<CustoPalavra>();
+		palavrasSugeridas = new ArrayList<PalavraComCusto>();
 	}
 	public void adicionarPalavra (String palavra, int distanciaAtual){
-		CustoPalavra palavraCorrente = new CustoPalavra(palavra, distanciaAtual);
+		PalavraComCusto palavraCorrente = new PalavraComCusto(palavra, distanciaAtual);
 		
 		if(palavrasSugeridas.isEmpty()){
 			palavrasSugeridas.add(palavraCorrente);
@@ -38,15 +38,15 @@ public class InsertionSort {
 			}
 		}
 	}
-	public void inserirPalavraNoIndice(int indice, CustoPalavra palavraCorrente){
-		CustoPalavra auxiliar;
+	public void inserirPalavraNoIndice(int indice, PalavraComCusto palavraCorrente){
+		PalavraComCusto auxiliar;
 		int j;
 		for(j = indice; j< palavrasSugeridas.size() && j < TAMANHO_ARRAY_MAX ;j++){
 			auxiliar = palavrasSugeridas.get(j);
 			palavrasSugeridas.set(j, palavraCorrente);
 			palavraCorrente = auxiliar;
 		}
-		if(palavrasSugeridas.size() < 10){
+		if(palavrasSugeridas.size() < TAMANHO_ARRAY_MAX){
 			palavrasSugeridas.add(j, palavraCorrente);
 		}
 	}

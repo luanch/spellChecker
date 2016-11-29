@@ -15,6 +15,7 @@ public class Teclado {
 	private @Getter @Setter String nome;
 	private double[][] distancias;
 	private @Getter double custoInsercaoRemocao;
+	private @Getter double custoTroca;
 	
 	private static final int QUANTIDADE_LETRAS_NO_ALFABETO = 26;
 
@@ -25,9 +26,11 @@ public class Teclado {
 	public Teclado () {
 		linhasDoTeclado = new ArrayList<Linha>();
 		this.custoInsercaoRemocao = 0.25;
+		this.custoTroca = 0.25;
 	}
 	
 	public Teclado(boolean neutro){
+		this.nome = "neutro";
 		distancias = new double[QUANTIDADE_LETRAS_NO_ALFABETO][QUANTIDADE_LETRAS_NO_ALFABETO];
 		for(int i=0; i< QUANTIDADE_LETRAS_NO_ALFABETO; i++){
 			for(int j=0; j< QUANTIDADE_LETRAS_NO_ALFABETO; j++){
@@ -35,6 +38,7 @@ public class Teclado {
 			}
 		}
 		this.custoInsercaoRemocao = 1;
+		this.custoTroca = 1;
 	}
 	
 	public double getDistancia(char letraInicial, char letraFinal){
@@ -75,7 +79,7 @@ public class Teclado {
 		}
 			}
 	
-	private double distanciaMaximaEntreTeclas(){
+	public double distanciaMaximaEntreTeclas(){
 		double distanciaMaxima = Integer.MIN_VALUE;
 		for(int i = 0; i< QUANTIDADE_LETRAS_NO_ALFABETO; i++){
 			for(int j = 0; j< QUANTIDADE_LETRAS_NO_ALFABETO; j++){

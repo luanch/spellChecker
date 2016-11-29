@@ -18,6 +18,7 @@ public class DistanciaTeclasTest {
 
 	private static  TiposDeTeclado tiposDeTeclado;
 	private DistanciaEntreTeclas calculador;
+	Teclado teclado;
 
 	
 	@Before 
@@ -105,7 +106,6 @@ public class DistanciaTeclasTest {
 	
 	private double dist(double width, double height)
 	{
-		return Math.sqrt(width * width + height * height);
+		return Math.sqrt(width * width + height * height)/9;
 	}
-	
 }

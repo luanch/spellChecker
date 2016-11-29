@@ -5,7 +5,7 @@ import java.util.List;
 
 import br.unirio.pm.spellChecker.LeitorDePalavras.LeitorDePalavras;
 import br.unirio.pm.spellChecker.bkTree.BKTree;
-import br.unirio.pm.spellChecker.calculadoresDeDistancia.CustoPalavra;
+import br.unirio.pm.spellChecker.calculadoresDeDistancia.PalavraComCusto;
 import br.unirio.pm.spellChecker.calculadoresDeDistancia.DistanciaDeDamerauLevenshtein;
 import br.unirio.pm.spellChecker.calculadoresDeDistancia.DistanciaDeLevenshtein;
 import br.unirio.pm.spellChecker.calculadoresDeDistancia.MoldeDeCalculadorDeDistanciaEntreStrings;
@@ -18,7 +18,7 @@ import br.unirio.pm.spellChecker.utilitariosTeclado.TiposDeTeclado;
  * sugere palavras que o usuário pode ter desejado digitar
  */
 public class SpellChecker {
-	private BKTree dicionarioDePalavras;
+	private BKTree arvoreDePalavras;
 
 	private final int CODIGO_LEVENSHTEIN = 1;
 	private final int CODIGO_DAMERAU_LEVENSHTEIN = 2;
@@ -26,6 +26,24 @@ public class SpellChecker {
 	/**
 	 * Construtor da classe
 	 */
+	
+	public SpellChecker (int codigoCalculador) {
+		Teclado teclado = new Teclado(true);
+		MoldeDeCalculadorDeDistanciaEntreStrings calculador;
+		switch(codigoCalculador){	
+			case CODIGO_DAMERAU_LEVENSHTEIN:
+				calculador = new DistanciaDeDamerauLevenshtein(teclado);
+				break;
+			default:
+				calculador = new DistanciaDeLevenshtein(teclado);
+		}
+    	arvoreDePalavras = new BKTree(calculador);
+    	
+    	LeitorDePalavras leitorDePalavras = new LeitorDePalavras();
+        leitorDePalavras.gerarDicionario(arvoreDePalavras);
+	}
+	
+	
     public SpellChecker(int codigoCalculador, String nomeTeclado) {
     	
     	TiposDeTeclado tiposDeTeclado = new TiposDeTeclado();
@@ -39,10 +57,10 @@ public class SpellChecker {
 			default:
 				calculador = new DistanciaDeLevenshtein(teclado);
 		}
-    	dicionarioDePalavras = new BKTree(calculador);
+    	arvoreDePalavras = new BKTree(calculador);
     	
     	LeitorDePalavras leitorDePalavras = new LeitorDePalavras();
-        leitorDePalavras.gerarDicionario(dicionarioDePalavras);
+        leitorDePalavras.gerarDicionario(arvoreDePalavras);
     }
     
     
@@ -52,25 +70,23 @@ public class SpellChecker {
 	 */
    public ArrayList<String> verificarPalavra(String palavra, int limiteDeOperacoes){
        
-	   ArrayList<CustoPalavra> arrayCustoPalavra = new ArrayList<CustoPalavra>();
+	   ArrayList<PalavraComCusto> arrayCustoPalavra = new ArrayList<PalavraComCusto>();
 	   ArrayList<String> resultadoDaBusca = new ArrayList<String>();
 	   
-	   arrayCustoPalavra =  dicionarioDePalavras.buscar(palavra, limiteDeOperacoes*100);
-	   for (CustoPalavra custoPalavra: arrayCustoPalavra){
+	   arrayCustoPalavra =  arvoreDePalavras.buscar(palavra, limiteDeOperacoes*100);
+	   for (PalavraComCusto custoPalavra: arrayCustoPalavra){
 		   resultadoDaBusca.add(custoPalavra.getPalavra());
 	   }
 	   
 	   return resultadoDaBusca;
    }
    
-   public ArrayList<CustoPalavra> verificarPalavraComErro(String palavra, int limiteDeOperacoes){
-	   ArrayList<CustoPalavra> arrayCustoPalavra = new ArrayList<CustoPalavra>();
+   public ArrayList<PalavraComCusto> verificarPalavraComErro(String palavra, int limiteDeOperacoes){
+	   ArrayList<PalavraComCusto> arrayCustoPalavra = new ArrayList<PalavraComCusto>();
 	   
-	   arrayCustoPalavra =  dicionarioDePalavras.buscar(palavra, limiteDeOperacoes*100);
+	   arrayCustoPalavra =  arvoreDePalavras.buscar(palavra, limiteDeOperacoes*100);
 
 	   
 	   return arrayCustoPalavra;
    }
-    
-
 }

@@ -1,102 +1,138 @@
 package br.unirio.pm.spellChecker.calculadoresDeDistancia;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import br.unirio.pm.spellChecker.utilitariosTeclado.Teclado;
 
 /**
- * Calcula a distancia de Damerou Levenshtein entre duas palavras 
+ * The Damerau-Levenshtein Algorithm is an extension to the Levenshtein
+ * Algorithm which solves the edit distance problem between a source string and
+ * a target string with the following operations:
  * 
+ * <ul>
+ * <li>Character Insertion</li>
+ * <li>Character Deletion</li>
+ * <li>Character Replacement</li>
+ * <li>Adjacent Character Swap</li>
+ * </ul>
+ * 
+ * Note that the adjacent character swap operation is an edit that may be
+ * applied when two adjacent characters in the source string match two adjacent
+ * characters in the target string, but in reverse order, rather than a general
+ * allowance for adjacent character swaps.
+ * <p>
+ * 
+ * This implementation allows the client to specify the costs of the various
+ * edit operations with the restriction that the cost of two swap operations
+ * must not be less than the cost of a delete operation followed by an insert
+ * operation. This restriction is required to preclude two swaps involving the
+ * same character being required for optimality which, in turn, enables a fast
+ * dynamic programming solution.
+ * <p>
+ * 
+ * The running time of the Damerau-Levenshtein algorithm is O(n*m) where n is
+ * the length of the source string and m is the length of the target string.
+ * This implementation consumes O(n*m) space.
+ * 
+ * @author Kevin L. Stern
  */
-public class DistanciaDeDamerauLevenshtein extends MoldeDeCalculadorDeDistanciaEntreStrings{
+public class DistanciaDeDamerauLevenshtein extends MoldeDeCalculadorDeDistanciaEntreStrings {
+	private Teclado teclado;
 
+	/**
+	 * Compute the Damerau-Levenshtein distance between the specified source
+	 * string and the specified target string.
+	 */
 	public DistanciaDeDamerauLevenshtein(Teclado teclado) {
 		this.teclado = teclado;
 	}
-	
-	/**
-     * Calcula a distância entre duas palavras levando em consideração 
-     * o número mínimo de operações para transformar uma palavra na outra
-     * (inserção, remoção, substituição de um caracter por outro ou transposição
-     * de dois caracteres adjacentes)
-     * Retorna -1 caso não haja palavras a serem comparadas
-     */
-	@Override
-    public int calcular(String primeiraPalavra, String segundaPalavra) {
-    	if (primeiraPalavra.length() == 0 && segundaPalavra.length() == 0) {
-			return -1;
+
+
+	// calcula a distancia da primeira para a segunda palavra
+	public int calcular (String primeiraString, String segundaString) {
+		double custoRemocao, custoInsercao, custoSubstituicao, custoTroca;
+		custoRemocao = teclado.getCustoInsercaoRemocao();
+		custoInsercao = custoRemocao;
+		custoTroca = teclado.getCustoTroca();
+		
+		//considera que todos os caracteres foram inseridos  
+		if (primeiraString.length() == 0) {
+			return (int) Math.round(segundaString.length() * custoInsercao * 100);
 		}
-        if (primeiraPalavra.length() == 0) 
-        	return segundaPalavra.length();
-        if (segundaPalavra.length() == 0) 
-        	return primeiraPalavra.length();
+		//considera que todos os caracteres foram removidos
+		if (segundaString.length() == 0) {
+			return (int) Math.round(primeiraString.length() * custoRemocao * 100);
+		}
 
-        // maior distância possível
-        int maiorDistanciaPossivel = primeiraPalavra.length() + segundaPalavra.length();
+		double[][] matrizDeDistancias = new double[primeiraString.length()][segundaString.length()];
 
-        // cria e inicializa uma tabela dos índices dos caracteres
-        HashMap<Character, Integer> indicesDosCaracteres = new HashMap<Character, Integer>();
-        
-        int i;
-        
-        for (i = 0; i < primeiraPalavra.length(); i++) {
-            if (!indicesDosCaracteres.containsKey(primeiraPalavra.charAt(i))) {
-                indicesDosCaracteres.put(primeiraPalavra.charAt(i), 0);
-            }
-        }
+		Map<Character, Integer> indicesDaPrimeiraStringPorCaracter = new HashMap<Character, Integer>();
 
-        for (i = 0; i < segundaPalavra.length(); i++) {
-            if (!indicesDosCaracteres.containsKey(segundaPalavra.charAt(i))) {
-                indicesDosCaracteres.put(segundaPalavra.charAt(i), 0);
-            }
-        }
+		if (primeiraString.charAt(0) != segundaString.charAt(0)) {
+			matrizDeDistancias[0][0] = Math.min(teclado.getDistancia(segundaString.charAt(0), primeiraString.charAt(0)), custoRemocao + custoInsercao);
+		}
 
-        // cria a matriz de distância 
-        double[][] matrizDeDistancias = new double[primeiraPalavra.length() + 2][segundaPalavra.length() + 2];
+		indicesDaPrimeiraStringPorCaracter.put(primeiraString.charAt(0), 0);
 
-        // preenche as bordas da matriz 
-        for (i = 0; i <= primeiraPalavra.length(); i++) {
-            matrizDeDistancias[i + 1][0] = maiorDistanciaPossivel;
-            matrizDeDistancias[i + 1][1] = i;
-        }
+		double distanciaRemocao;
+		double distanciaInsercao;
+		double distanciaSubstituicao;
+		
+		for (int i = 1; i < primeiraString.length(); i++) {
+			custoSubstituicao = teclado.getDistancia(primeiraString.charAt(i), segundaString.charAt(0));
+			distanciaRemocao = matrizDeDistancias[i - 1][0] + custoRemocao;
+			distanciaInsercao = (i + 1) * custoRemocao + custoInsercao;
+			distanciaSubstituicao = i * custoRemocao
+					+ (primeiraString.charAt(i) == segundaString.charAt(0) ? 0 : custoSubstituicao);
+			matrizDeDistancias[i][0] = Math.min(Math.min(distanciaRemocao, distanciaInsercao),
+					distanciaSubstituicao);
+		}
+		for (int j = 1; j < segundaString.length(); j++) {
+			custoSubstituicao = teclado.getDistancia(primeiraString.charAt(0), segundaString.charAt(j));
+			distanciaRemocao = (j + 1) * custoInsercao + custoRemocao;
+			distanciaInsercao = matrizDeDistancias[0][j - 1] + custoInsercao;
+			distanciaSubstituicao = j * custoInsercao
+					+ (primeiraString.charAt(0) == segundaString.charAt(j) ? 0 : custoSubstituicao);
+			matrizDeDistancias[0][j] = Math.min(Math.min(distanciaRemocao, distanciaRemocao),
+					distanciaSubstituicao);
+		}
+		for (int i = 1; i < primeiraString.length(); i++) {
+			int maxSourceLetterMatchIndex = primeiraString.charAt(i) == segundaString.charAt(0) ? 0
+					: -1;
+			for (int j = 1; j < segundaString.length(); j++) {
+				custoSubstituicao = teclado.getDistancia(primeiraString.charAt(i), segundaString.charAt(j));
 
-        for (i = 0; i <= segundaPalavra.length(); i++) {
-            matrizDeDistancias[0][i + 1] = maiorDistanciaPossivel;
-            matrizDeDistancias[1][i + 1] = i;
-
-        }
-
-        // preenche a matriz de distância
-        // passa por cada char da primeiraPalavra
-        for (i = 1; i <= primeiraPalavra.length(); i++) {
-            int db = 0;
-
-            // passa por cada char da segundaPalavra
-            for (int j = 1; j <= segundaPalavra.length(); j++) {
-                int i1 = indicesDosCaracteres.get(segundaPalavra.charAt(j - 1));
-                int j1 = db;
-
-                
-                char letraPrimeiraPalavra = primeiraPalavra.charAt(i - 1);
-                char letraSegundaPalavra = segundaPalavra.charAt(j - 1);
-                double custo =  teclado.getDistancia(letraPrimeiraPalavra, letraSegundaPalavra);
-
-                matrizDeDistancias[i + 1][j + 1] = 
-        		Math.min(
-            		minimo(
-                        matrizDeDistancias[i][j] + custo, // substituição
-                        matrizDeDistancias[i + 1][j] + teclado.getCustoInsercaoRemocao(), // inserção
-                        matrizDeDistancias[i][j + 1] + teclado.getCustoInsercaoRemocao()) // remoção
-                    ,matrizDeDistancias[i1][j1] + (i - i1 - 1) + 1 + (j - j1 - 1)
-                );
-                
-                
-            }
-
-            indicesDosCaracteres.put(primeiraPalavra.charAt(i - 1), i);
-        }
-
-        return (int) Math.round(matrizDeDistancias[primeiraPalavra.length() + 1][segundaPalavra.length() + 1]*100);
-    }
-
+				Integer candidateSwapIndex = indicesDaPrimeiraStringPorCaracter.get(segundaString
+						.charAt(j));
+				int jSwap = maxSourceLetterMatchIndex;
+				distanciaRemocao = matrizDeDistancias[i - 1][j] + custoRemocao;
+				distanciaInsercao = matrizDeDistancias[i][j - 1] + custoInsercao;
+				distanciaSubstituicao = matrizDeDistancias[i - 1][j - 1];
+				if (primeiraString.charAt(i) != segundaString.charAt(j)) {
+					distanciaSubstituicao += custoSubstituicao;
+				} else {
+					maxSourceLetterMatchIndex = j;
+				}
+				double  swapDistance;
+				if (candidateSwapIndex != null && jSwap != -1) {
+					int iSwap = candidateSwapIndex;
+					double preSwapCost;
+					if (iSwap == 0 && jSwap == 0) {
+						preSwapCost = 0;
+					} else {
+						preSwapCost = matrizDeDistancias[Math.max(0, iSwap - 1)][Math.max(0, jSwap - 1)];
+					}
+					swapDistance = preSwapCost + (i - iSwap - 1) * custoRemocao
+							+ (j - jSwap - 1) * custoInsercao + custoTroca;
+				} else {
+					swapDistance = Integer.MAX_VALUE;
+				}
+				matrizDeDistancias[i][j] = Math.min(Math.min(Math
+						.min(distanciaRemocao, distanciaInsercao), distanciaSubstituicao), swapDistance);
+			}
+			indicesDaPrimeiraStringPorCaracter.put(primeiraString.charAt(i), i);
+		}
+		return (int) Math.round(matrizDeDistancias[primeiraString.length() - 1][segundaString.length() - 1]*100);
+	}
 }

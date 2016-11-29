@@ -18,9 +18,6 @@ import br.unirio.pm.spellChecker.utilitariosTeclado.TiposDeTeclado;
 
 public class BkTreeTest {
 	
-	private static BKTree bkTree;
-
-	
 	@Before 
 	public void inicializarTestes(){
 	}
@@ -34,10 +31,6 @@ public class BkTreeTest {
 	
 	@Test
 	public void testInsercaoDePalavra(){
-		
-
-
-    	
     	TiposDeTeclado tiposDeTeclado = new TiposDeTeclado();
     	Teclado teclado = tiposDeTeclado.getTecladoByName("QWERTY");
     	
@@ -45,19 +38,16 @@ public class BkTreeTest {
 		DistanciaDeLevenshtein calculador = new DistanciaDeLevenshtein(teclado);
 		
 		BKTree bkTree = new BKTree(calculador);
+		LeitorDePalavras leitorDePalavras = new LeitorDePalavras();
+        leitorDePalavras.gerarDicionario(bkTree);
+
 		
 		
-		
-		assertFalse (bkTree.contem("casa"));
-		bkTree.inserir("casa");
+		assertFalse (bkTree.contem("casardyz"));
 		assertTrue (bkTree.contem("casa"));
 		
-		assertFalse(bkTree.contem("telhado"));
-		bkTree.inserir("telhado");
-		
-		bkTree.inserir("porta");
-		assertTrue (bkTree.contem("porta"));
-		assertTrue (bkTree.contem("telhado"));
+		assertFalse(bkTree.contem("telhaawrado"));
+		assertTrue(bkTree.contem("telhado"));
 
 	}	
 }
