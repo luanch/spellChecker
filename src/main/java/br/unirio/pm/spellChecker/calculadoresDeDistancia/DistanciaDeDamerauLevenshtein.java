@@ -58,11 +58,11 @@ public class DistanciaDeDamerauLevenshtein extends MoldeDeCalculadorDeDistanciaE
 		
 		//considera que todos os caracteres foram inseridos  
 		if (primeiraString.length() == 0) {
-			return (int) Math.round(segundaString.length() * custoInsercao * 100);
+			return (int) Math.abs(segundaString.length() * custoInsercao * 100);
 		}
 		//considera que todos os caracteres foram removidos
 		if (segundaString.length() == 0) {
-			return (int) Math.round(primeiraString.length() * custoRemocao * 100);
+			return (int) Math.abs(primeiraString.length() * custoRemocao * 100);
 		}
 
 		double[][] matrizDeDistancias = new double[primeiraString.length()][segundaString.length()];
@@ -133,6 +133,6 @@ public class DistanciaDeDamerauLevenshtein extends MoldeDeCalculadorDeDistanciaE
 			}
 			indicesDaPrimeiraStringPorCaracter.put(primeiraString.charAt(i), i);
 		}
-		return (int) Math.round(matrizDeDistancias[primeiraString.length() - 1][segundaString.length() - 1]*100);
+		return (int) Math.abs(matrizDeDistancias[primeiraString.length() - 1][segundaString.length() - 1]*100);
 	}
 }

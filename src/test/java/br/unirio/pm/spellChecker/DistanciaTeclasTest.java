@@ -98,8 +98,8 @@ public class DistanciaTeclasTest {
 		
 		
 		
-//		assertEquals(0.25, palavra.getCustoDeInserirEDeletar(), 0.001);
-//		assertEquals(dist(9.0, 0), layout.getDistanciaMaxima(), 0.001);
+		assertEquals(0.25, teclado.getCustoInsercaoRemocao(), 0.001);
+		assertEquals(dist(9.0, 0), teclado.distanciaMaximaEntreTeclas(), 0.001);
 		
 		
 	}

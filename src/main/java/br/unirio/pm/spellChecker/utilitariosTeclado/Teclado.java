@@ -34,7 +34,12 @@ public class Teclado {
 		distancias = new double[QUANTIDADE_LETRAS_NO_ALFABETO][QUANTIDADE_LETRAS_NO_ALFABETO];
 		for(int i=0; i< QUANTIDADE_LETRAS_NO_ALFABETO; i++){
 			for(int j=0; j< QUANTIDADE_LETRAS_NO_ALFABETO; j++){
-				distancias[i][j] = 1;
+				if(i==j){
+					distancias[i][j]= 0;
+				}
+				else{
+					distancias[i][j] = 1;
+				}
 			}
 		}
 		this.custoInsercaoRemocao = 1;

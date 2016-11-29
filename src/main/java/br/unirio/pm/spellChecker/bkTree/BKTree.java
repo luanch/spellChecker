@@ -75,9 +75,6 @@ public class BKTree {
      * Método auxiliar ao anterior, busca uma palavra na árvore e retorna se achou ou não
      */
     private void buscar(Node node, String palavra, int limiteDeOperacoes ){
-    	if (palavra.equals("casa") || palavra.equals("CASA")) {
-    		System.out.println(" oi");
-    	}
       
     	String palavraModificada = normalizarPalavra(palavra);
     	int distanciaAtual = calculador.calcular(node.palavra, palavraModificada);

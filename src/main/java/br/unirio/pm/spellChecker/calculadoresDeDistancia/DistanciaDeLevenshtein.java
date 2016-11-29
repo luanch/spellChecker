@@ -22,9 +22,9 @@ public class DistanciaDeLevenshtein extends MoldeDeCalculadorDeDistanciaEntreStr
 			return -1;
 		}
         if (primeiraPalavra.length() == 0) 
-        	return (int) Math.round(segundaPalavra.length() * teclado.getCustoInsercaoRemocao() * 100);
+        	return (int) Math.abs(segundaPalavra.length() * teclado.getCustoInsercaoRemocao() * 100);
         if (segundaPalavra.length() == 0) 
-        	return (int) Math.round(primeiraPalavra.length() * teclado.getCustoInsercaoRemocao() * 100);
+        	return (int) Math.abs(primeiraPalavra.length() * teclado.getCustoInsercaoRemocao() * 100);
 
         int tamanhoDaPrimeiraPalavra = primeiraPalavra.length();
         int tamanhoDaSegundaPalavra = segundaPalavra.length();
@@ -50,19 +50,17 @@ public class DistanciaDeLevenshtein extends MoldeDeCalculadorDeDistanciaEntreStr
             	char letraSegundaPalavra = segundaPalavra.charAt(j - 1);
             			
             	double distanciaEntreLetras = teclado.getDistancia(letraPrimeiraPalavra, letraSegundaPalavra);
-
-
+            	double custoInsercaoRemocao = teclado.getCustoInsercaoRemocao();
             	// adiciona na matriz o menor valor dentre os vizinhos anteriores (lado, cima e diagonal esquerda)
             	matrizDeLevenshtein[i][j] = 
-                		minimo(matrizDeLevenshtein[i - 1][j] + teclado.getCustoInsercaoRemocao(), // insercao
-                				matrizDeLevenshtein[i][j - 1] + teclado.getCustoInsercaoRemocao(), // remocao
+                		minimo(matrizDeLevenshtein[i - 1][j] + custoInsercaoRemocao, // insercao
+                				matrizDeLevenshtein[i][j - 1] + custoInsercaoRemocao, // remocao
                 				matrizDeLevenshtein[i - 1][j - 1] + distanciaEntreLetras // substituicao
 						);
             }
         }
         
         //o ultimo elemento da matriz eh a distancia minima
-        int retorno = (int) Math.round(matrizDeLevenshtein[tamanhoDaPrimeiraPalavra][tamanhoDaSegundaPalavra]*100);
-        return retorno;
+        return (int) Math.abs(matrizDeLevenshtein[tamanhoDaPrimeiraPalavra][tamanhoDaSegundaPalavra]*100);
 	}
 }
