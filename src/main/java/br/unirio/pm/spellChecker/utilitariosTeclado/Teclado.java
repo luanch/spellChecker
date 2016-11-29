@@ -57,7 +57,7 @@ public class Teclado {
 		if ((letraInicial-'A' < 0) || (letraFinal-'A' < 0)) {
 			System.out.println("op");
 		}
-		return distancias[letraInicial-'A'][letraFinal-'A'];
+		return distancias[letraInicial-'A'][letraFinal-'A']/distanciaMaximaEntreTeclas();
 	}
 	
 	public void prepararTeclado(){
@@ -75,11 +75,10 @@ public class Teclado {
 			}
 		}
 		
-		double distanciaMaximaEntreTeclas = distanciaMaximaEntreTeclas();
 		// Normaliza tudo, colocando a maior distancia do teclado com valor 1
 		for(int i = 0; i< letrasDoAlfabeto.length; i++){
 			for(int j = 0; j< letrasDoAlfabeto.length; j++){
-				distancias[i][j] = distancias[i][j]/distanciaMaximaEntreTeclas;
+				distancias[i][j] = distancias[i][j];
 			}
 		}
 			}

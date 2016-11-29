@@ -86,9 +86,19 @@ public class DistanciaEntreTeclas {
 
 		//calcula o offset de cada linha, de baixo para cima
 		for (int i = linhaMaisAbaixo; i > linhaMaisAcima; i--) {
+			
+			//offsetAcumulado += linhas.get(i).getOffset();
+			//offsetAcumulado = Math.abs(offsetAcumulado);
+			if(letraInicial=='P' && letraFinal=='Z')
+			{
+				System.out.println("oi");
+			}
 			offsetAcumulado += linhas.get(i).getOffset();
+			
+			//double offsetAtual = Math.abs(linhas.get(i).getOffset());
+			//offsetAcumulado += offsetAtual;
 		}
-		
+
 		distanciaCatetoColuna = Math.abs(posicaoNoTecladoDaLetraInicial[1] - posicaoNoTecladoDaLetraFinal[1]);
 		distanciaCatetoLinha = Math.abs(posicaoNoTecladoDaLetraInicial[0] - posicaoNoTecladoDaLetraFinal[0])+offsetAcumulado;
 		
