@@ -23,7 +23,9 @@ public class Node {
 	 * Retorna a palavra do Node
 	 */
 	public String getPalavra(){
-		return palavra;
+		if(!palavra.isEmpty())
+			return palavra;
+		return null;
 	}
 
 	/**

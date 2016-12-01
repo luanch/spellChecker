@@ -63,7 +63,11 @@ public class BKTree {
 	 * Método auxiliar ao anterior, busca uma palavra na árvore e retorna se achou ou não
 	 */
 	private void buscar(Node node, String palavra, int limiteDeOperacoes ){
+
 		String palavraModificada = normalizarPalavra(palavra);
+		if(node == null){
+			return;
+		}
 		int distanciaAtual = calculador.calcular(node.palavra, palavraModificada);
 
 		// seguindo o algoritmo da bk-tree, busca-se apenas palavras entre limite-1 e limite+1
