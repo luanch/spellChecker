@@ -9,14 +9,14 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import br.unirio.pm.spellChecker.LeitorDePalavras.LeitorDePalavras;
 import br.unirio.pm.spellChecker.bkTree.BKTree;
-import br.unirio.pm.spellChecker.calculadoresDeDistancia.PalavraComCusto;
+import br.unirio.pm.spellChecker.modelos.PalavraComCusto;
+import br.unirio.pm.spellChecker.modelos.Teclado;
+import br.unirio.pm.spellChecker.modelos.TiposDeTeclado;
 import br.unirio.pm.spellChecker.calculadoresDeDistancia.DistanciaDeDamerauLevenshtein;
 import br.unirio.pm.spellChecker.calculadoresDeDistancia.DistanciaDeLevenshtein;
-import br.unirio.pm.spellChecker.calculadoresDeDistancia.MoldeDeCalculadorDeDistanciaEntreStrings;
-import br.unirio.pm.spellChecker.utilitariosTeclado.Teclado;
-import br.unirio.pm.spellChecker.utilitariosTeclado.TiposDeTeclado;
+import br.unirio.pm.spellChecker.calculadoresDeDistancia.ModeloDeCalculadorDeDistanciaEntreStrings;
+import br.unirio.pm.spellChecker.leitores.LeitorDePalavras;
 
 
 public class SpellCheckerTest{
@@ -39,7 +39,7 @@ public class SpellCheckerTest{
 		//teclado neutro usando Levenshtein
 		spellChecker = new SpellChecker(1);
 		
-		ArrayList<PalavraComCusto> listaCasa = spellChecker.verificarPalavraComErro("casa", 1);
+		ArrayList<PalavraComCusto> listaCasa = spellChecker.verificarPalavraComDistancia("casa", 1);
 		ArrayList<String> palavrasCasa = new ArrayList<String>();
 		   for (PalavraComCusto custoPalavra: listaCasa){
 			   palavrasCasa.add(custoPalavra.getPalavra());
@@ -60,7 +60,7 @@ public class SpellCheckerTest{
 
 		
 
-		ArrayList<PalavraComCusto> listaCervega = spellChecker.verificarPalavraComErro("cervega", 2);
+		ArrayList<PalavraComCusto> listaCervega = spellChecker.verificarPalavraComDistancia("cervega", 2);
 		ArrayList<String> palavrasCervega = new ArrayList<String>();
 		   for (PalavraComCusto custoPalavra: listaCervega){
 			   palavrasCervega.add(custoPalavra.getPalavra());
@@ -75,7 +75,7 @@ public class SpellCheckerTest{
 			
 			
 			
-		ArrayList<PalavraComCusto> listaAviea = spellChecker.verificarPalavraComErro("aviea", 2);
+		ArrayList<PalavraComCusto> listaAviea = spellChecker.verificarPalavraComDistancia("aviea", 2);
 		ArrayList<String> palavrasAviea = new ArrayList<String>();
 		   for (PalavraComCusto custoPalavra: listaAviea){
 			   palavrasAviea.add(custoPalavra.getPalavra());
@@ -99,7 +99,7 @@ public class SpellCheckerTest{
 		//teclado neutro usando Levenshtein
 		spellChecker = new SpellChecker(2);
 		
-		ArrayList<PalavraComCusto> listaCasa = spellChecker.verificarPalavraComErro("casa", 1);
+		ArrayList<PalavraComCusto> listaCasa = spellChecker.verificarPalavraComDistancia("casa", 1);
 		ArrayList<String> palavrasCasa = new ArrayList<String>();
 		   for (PalavraComCusto custoPalavra: listaCasa){
 			   palavrasCasa.add(custoPalavra.getPalavra());
@@ -120,7 +120,7 @@ public class SpellCheckerTest{
 
 		
 
-		ArrayList<PalavraComCusto> listaCervega = spellChecker.verificarPalavraComErro("cervega", 2);
+		ArrayList<PalavraComCusto> listaCervega = spellChecker.verificarPalavraComDistancia("cervega", 2);
 		ArrayList<String> palavrasCervega = new ArrayList<String>();
 		   for (PalavraComCusto custoPalavra: listaCervega){
 			   palavrasCervega.add(custoPalavra.getPalavra());
@@ -135,7 +135,7 @@ public class SpellCheckerTest{
 			
 			
 			
-		ArrayList<PalavraComCusto> listaAviea = spellChecker.verificarPalavraComErro("aviea", 2);
+		ArrayList<PalavraComCusto> listaAviea = spellChecker.verificarPalavraComDistancia("aviea", 2);
 		ArrayList<String> palavrasAviea = new ArrayList<String>();
 		   for (PalavraComCusto custoPalavra: listaAviea){
 			   palavrasAviea.add(custoPalavra.getPalavra());
@@ -158,7 +158,7 @@ public class SpellCheckerTest{
 	public void testMarcioLevenshteinQwerty(){
 		
 		spellChecker = new SpellChecker(1, "QWERTY");
-		ArrayList<PalavraComCusto> result = spellChecker.verificarPalavraComErro("casa", 1);
+		ArrayList<PalavraComCusto> result = spellChecker.verificarPalavraComDistancia("casa", 1);
 		
 		   for (PalavraComCusto custoPalavra: result){
 			//   System.out.print(custoPalavra.getPalavra() + ":" + custoPalavra.getDistancia() + ";");
@@ -178,7 +178,7 @@ public class SpellCheckerTest{
 		
 		
 		spellChecker = new SpellChecker(1, "QWERTY");
-		ArrayList<PalavraComCusto> result2 = spellChecker.verificarPalavraComErro("cervega", 2);
+		ArrayList<PalavraComCusto> result2 = spellChecker.verificarPalavraComDistancia("cervega", 2);
 		
 		   for (PalavraComCusto custoPalavra: result2){
 //			   System.out.print(custoPalavra.getPalavra() + ":" + custoPalavra.getDistancia() + ";");
@@ -198,7 +198,7 @@ public class SpellCheckerTest{
 		
 		
 		spellChecker = new SpellChecker(1, "QWERTY");
-		ArrayList<PalavraComCusto> result3 = spellChecker.verificarPalavraComErro("aviea", 2);
+		ArrayList<PalavraComCusto> result3 = spellChecker.verificarPalavraComDistancia("aviea", 2);
 		
 		   for (PalavraComCusto custoPalavra: result3){
 //			   System.out.print(custoPalavra.getPalavra() + ":" + custoPalavra.getDistancia() + ";");
@@ -219,7 +219,7 @@ public class SpellCheckerTest{
 	@Test
 	public void testMarcioDemerauTecladoQwerty(){
 		spellChecker = new SpellChecker(2, "QWERTY");
-		ArrayList<PalavraComCusto> result = spellChecker.verificarPalavraComErro("casa", 1);
+		ArrayList<PalavraComCusto> result = spellChecker.verificarPalavraComDistancia("casa", 1);
 		
 		check(result, 0, "casa", 0.0);
 		check(result, 1, "cada", 0.11);
@@ -234,7 +234,7 @@ public class SpellCheckerTest{
 		
 		
 		spellChecker = new SpellChecker(2, "QWERTY");
-		ArrayList<PalavraComCusto> result2 = spellChecker.verificarPalavraComErro("cervega", 2);
+		ArrayList<PalavraComCusto> result2 = spellChecker.verificarPalavraComDistancia("cervega", 2);
 
 		check(result2, 0, "cerveja", 0.22);
 		check(result2, 1, "cereja", 0.47);
@@ -249,7 +249,7 @@ public class SpellCheckerTest{
 		
 		
 		spellChecker = new SpellChecker(2, "QWERTY");
-		ArrayList<PalavraComCusto> result3 = spellChecker.verificarPalavraComErro("aviea", 2);
+		ArrayList<PalavraComCusto> result3 = spellChecker.verificarPalavraComDistancia("aviea", 2);
 		
 		check(result3, 0, "acida", 0.23);
 		check(result3, 1, "aveia", 0.25);
@@ -267,7 +267,7 @@ public class SpellCheckerTest{
 	public void testMarcioDvorakLevenshtein(){
 		
 		spellChecker = new SpellChecker(1, "DVORAK");
-		ArrayList<PalavraComCusto> result = spellChecker.verificarPalavraComErro("casa", 2);
+		ArrayList<PalavraComCusto> result = spellChecker.verificarPalavraComDistancia("casa", 2);
 		
 		check(result, 0, "casa", 0.0);
 		check(result, 1, "caso", 0.11);
@@ -282,7 +282,7 @@ public class SpellCheckerTest{
 
 		
 		spellChecker = new SpellChecker(1, "DVORAK");
-		ArrayList<PalavraComCusto> result2 = spellChecker.verificarPalavraComErro("cervega", 2);
+		ArrayList<PalavraComCusto> result2 = spellChecker.verificarPalavraComDistancia("cervega", 2);
 		
 		check(result2, 0, "corveta", 0.26);
 		check(result2, 1, "corveia", 0.35);
@@ -322,7 +322,7 @@ public class SpellCheckerTest{
 		assertTrue(spellChecker.verificarPalavra("casae", 1).contains("casa".toUpperCase()));
 		
 		//Nao contem
-		ArrayList<PalavraComCusto> listaZurrarer = spellChecker.verificarPalavraComErro("kzurrar", 1);
+		ArrayList<PalavraComCusto> listaZurrarer = spellChecker.verificarPalavraComDistancia("kzurrar", 1);
 		ArrayList<String> palavrasZurrarer = new ArrayList<String>();
 		   for (PalavraComCusto custoPalavra: listaZurrarer){
 			   palavrasZurrarer.add(custoPalavra.getPalavra());
@@ -353,7 +353,7 @@ public class SpellCheckerTest{
 		
 		// FEIRA nao esta presente, pq levenshtein nao descrimina o caso de troca
 		// assumindo o mesmo como duas substituicoes
-		ArrayList<PalavraComCusto> listaFiera = spellChecker.verificarPalavraComErro("fiera", 2);
+		ArrayList<PalavraComCusto> listaFiera = spellChecker.verificarPalavraComDistancia("fiera", 2);
 		ArrayList<String> palavrasFiera = new ArrayList<String>();
 		   for (PalavraComCusto custoPalavra: listaFiera){
 			   palavrasFiera.add(custoPalavra.getPalavra());
@@ -363,7 +363,7 @@ public class SpellCheckerTest{
 		assertFalse(palavrasFiera.contains("FEIRA"));
 		
 		// CASA entra na lista, mas como duas substituições
-		ArrayList<PalavraComCusto> listaCsaa = spellChecker.verificarPalavraComErro("csaa-", 2);
+		ArrayList<PalavraComCusto> listaCsaa = spellChecker.verificarPalavraComDistancia("csaa-", 2);
 		ArrayList<String> palavrasCsaa = new ArrayList<String>();
 		  for (PalavraComCusto custoPalavra: listaCsaa){
 			   palavrasCsaa.add(custoPalavra.getPalavra());
@@ -372,7 +372,7 @@ public class SpellCheckerTest{
 		assertTrue(palavrasCsaa.contains("CASA"));
 
 		//System.out.println("Ferramunta");
-		ArrayList<PalavraComCusto> listaFerramunta = spellChecker.verificarPalavraComErro("ferramunta", 1);
+		ArrayList<PalavraComCusto> listaFerramunta = spellChecker.verificarPalavraComDistancia("ferramunta", 1);
 		ArrayList<String> palavrasFerramunta = new ArrayList<String>();
 		   for (PalavraComCusto custoPalavra: listaFerramunta){
 			   palavrasFerramunta.add(custoPalavra.getPalavra());

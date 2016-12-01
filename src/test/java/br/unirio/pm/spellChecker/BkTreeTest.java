@@ -9,11 +9,11 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import br.unirio.pm.spellChecker.LeitorDePalavras.LeitorDePalavras;
 import br.unirio.pm.spellChecker.bkTree.BKTree;
 import br.unirio.pm.spellChecker.calculadoresDeDistancia.DistanciaDeLevenshtein;
-import br.unirio.pm.spellChecker.utilitariosTeclado.Teclado;
-import br.unirio.pm.spellChecker.utilitariosTeclado.TiposDeTeclado;
+import br.unirio.pm.spellChecker.leitores.LeitorDePalavras;
+import br.unirio.pm.spellChecker.modelos.Teclado;
+import br.unirio.pm.spellChecker.modelos.TiposDeTeclado;
 
 
 public class BkTreeTest {

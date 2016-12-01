@@ -9,8 +9,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import br.unirio.pm.spellChecker.calculadoresDeDistancia.DistanciaEntreTeclas;
-import br.unirio.pm.spellChecker.utilitariosTeclado.Teclado;
-import br.unirio.pm.spellChecker.utilitariosTeclado.TiposDeTeclado;
+import br.unirio.pm.spellChecker.modelos.Teclado;
+import br.unirio.pm.spellChecker.modelos.TiposDeTeclado;
 
 public class DistanciaTeclasTest {
 

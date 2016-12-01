@@ -1,4 +1,4 @@
-package br.unirio.pm.spellChecker.utilitariosTeclado;
+package br.unirio.pm.spellChecker.leitores;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -12,38 +12,35 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import br.unirio.pm.spellChecker.modelos.Linha;
+import br.unirio.pm.spellChecker.modelos.Teclado;
+
 /**
  * Classe que lê o xml dos tipos de teclado
  */
 public class LeitorDeTeclado {
 
+	/**
+	 * Funcao que le o XML de teclados e armazena os teclados numa lista
+	 */
 	public ArrayList<Teclado> getTeclados() {
-	    
 		ArrayList<Teclado> teclados = new ArrayList<Teclado>();
-		
+
 		try {
-			File arquivoXml = new File("KeyboardLayouts.xml");
+			File arquivoXml = new File("arquivos/KeyboardLayouts.xml");
 			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 			Document documento = dBuilder.parse(arquivoXml);
-		
-			//optional, but recommended
-			//read this - http://stackoverflow.com/questions/13786607/normalization-in-dom-parsing-with-java-how-does-it-work
+
 			documento.getDocumentElement().normalize();
-		
 			NodeList nList = documento.getElementsByTagName("layout");
-	
 			for (int temp = 0; temp < nList.getLength(); temp++) {
-		
 				Node nNode = nList.item(temp);
-						
 				if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-		
 					Element eElement = (Element) nNode;
-		
 					Teclado teclado = new Teclado();
 					teclado.setNome(eElement.getAttribute("model"));
-					
+
 					for (int i = 0; i < eElement.getElementsByTagName("line").getLength(); i++){
 						NodeList linhas = eElement.getElementsByTagName("line");
 						Node linhaNode = linhas.item(i);
@@ -51,16 +48,16 @@ public class LeitorDeTeclado {
 						Linha linha;
 						// verifica se linha tem atributos
 						if(atributosDeLinha.getLength()!= 0){
-							
+
 							// o valor de offset vem com algo do tipo offset="0.5"
 							String offSetStringComLixo = atributosDeLinha.getNamedItem("offset").toString();
-							
+
 							// remove-se as aspas e o offset=
 							String offSetString = offSetStringComLixo.replace("offset=\"", "").replace("\"", "");
-							
+
 							// Agora sim temos um valor double de offset, 
 							double offset = Double.parseDouble(offSetString) ;
-							
+
 							// que pode ser passado no construtor de Linha
 							linha = new Linha(linhaNode.getTextContent(), offset);
 						}
@@ -68,15 +65,14 @@ public class LeitorDeTeclado {
 							//se n tem offset, usamos o construtor sem offset
 							linha = new Linha(linhaNode.getTextContent());
 						}
-						
 						teclado.adicionarLinha(linha);	
 					}
 					teclados.add(teclado);
 				}
 			}
-	    } catch (Exception e) {
-	    	e.printStackTrace();
-	    }
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return teclados;
 	}
 }

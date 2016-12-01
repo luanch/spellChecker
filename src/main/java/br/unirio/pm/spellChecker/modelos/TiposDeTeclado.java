@@ -1,6 +1,8 @@
-package br.unirio.pm.spellChecker.utilitariosTeclado;
+package br.unirio.pm.spellChecker.modelos;
 
 import java.util.ArrayList;
+
+import br.unirio.pm.spellChecker.leitores.LeitorDeTeclado;
 
 /**
  * Classe com todos os tipos de teclado em uma lista
@@ -8,9 +10,11 @@ import java.util.ArrayList;
 public class TiposDeTeclado {
 	private ArrayList<Teclado> teclados;
 	
+	/**
+	 * Construtor
+	 */
 	public TiposDeTeclado(){
 		LeitorDeTeclado geradorDeTeclados = new LeitorDeTeclado();
-		
 		teclados = geradorDeTeclados.getTeclados();
 	}
 	
@@ -26,10 +30,16 @@ public class TiposDeTeclado {
 		return null;
 	}
 	
+	/**
+	 * Retorna a lista de todos os teclados
+	 */
 	public ArrayList<Teclado> getTeclados(){
 		return teclados;
 	}
 	
+	/**
+	 * Retorna um teclado neutro
+	 */
 	public Teclado getTecladoNeutro(){
 		boolean neutro = true;
 		Teclado teclado = new Teclado(neutro);

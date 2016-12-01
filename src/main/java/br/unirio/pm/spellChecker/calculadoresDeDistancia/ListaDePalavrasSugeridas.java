@@ -2,19 +2,34 @@ package br.unirio.pm.spellChecker.calculadoresDeDistancia;
 
 import java.util.ArrayList;
 
+import br.unirio.pm.spellChecker.modelos.PalavraComCusto;
 import lombok.Getter;
 
-public class InsertionSort {
+/**
+ * Classe que monta e mantem a lista de palavras sugeridas
+ * possuindo um determinado tamanho maximo
+ */
+public class ListaDePalavrasSugeridas {
 	private @Getter ArrayList<PalavraComCusto> palavrasSugeridas;
 	private static final int TAMANHO_ARRAY_MAX = 10;
-	
-	public InsertionSort(){
+
+	/**
+	 * Construtor
+	 */
+	public ListaDePalavrasSugeridas(){
 		palavrasSugeridas = new ArrayList<PalavraComCusto>();
 	}
+
+	/**
+	 * Adiciona uma nova palavra a lista
+	 */
 	public void adicionarPalavra (String palavra, int distanciaAtual){
+		// Monta um objeto que reune a palavra e a distancia dela
 		PalavraComCusto palavraCorrente = new PalavraComCusto(palavra, distanciaAtual);
-		
+
+		// se a lista estiver vazia
 		if(palavrasSugeridas.isEmpty()){
+			// adiciona palavra na lista
 			palavrasSugeridas.add(palavraCorrente);
 		}
 		else{
@@ -38,6 +53,11 @@ public class InsertionSort {
 			}
 		}
 	}
+
+	/**
+	 * Realiza a insercao de uma PalavraComCusto em um determinado indice,
+	 * se preocupando com a reorganizacao no resto da lista
+	 */
 	public void inserirPalavraNoIndice(int indice, PalavraComCusto palavraCorrente){
 		PalavraComCusto auxiliar;
 		int j;

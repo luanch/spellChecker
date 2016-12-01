@@ -3,59 +3,35 @@ package br.unirio.pm.spellChecker.calculadoresDeDistancia;
 import java.util.HashMap;
 import java.util.Map;
 
-import br.unirio.pm.spellChecker.utilitariosTeclado.Teclado;
+import br.unirio.pm.spellChecker.modelos.Teclado;
 
 /**
- * The Damerau-Levenshtein Algorithm is an extension to the Levenshtein
- * Algorithm which solves the edit distance problem between a source string and
- * a target string with the following operations:
- * 
- * <ul>
- * <li>Character Insertion</li>
- * <li>Character Deletion</li>
- * <li>Character Replacement</li>
- * <li>Adjacent Character Swap</li>
- * </ul>
- * 
- * Note that the adjacent character swap operation is an edit that may be
- * applied when two adjacent characters in the source string match two adjacent
- * characters in the target string, but in reverse order, rather than a general
- * allowance for adjacent character swaps.
- * <p>
- * 
- * This implementation allows the client to specify the costs of the various
- * edit operations with the restriction that the cost of two swap operations
- * must not be less than the cost of a delete operation followed by an insert
- * operation. This restriction is required to preclude two swaps involving the
- * same character being required for optimality which, in turn, enables a fast
- * dynamic programming solution.
- * <p>
- * 
- * The running time of the Damerau-Levenshtein algorithm is O(n*m) where n is
- * the length of the source string and m is the length of the target string.
- * This implementation consumes O(n*m) space.
+ * Classe que calcula a distancia entre duas palavras usando o algoritmo de Damerau-Levenshtein,
+ * levando em considerecao 4 operacoes (insercao de letra, remocao de letra, substituicao de letra
+ * e troca de letras vizinhas. O algoritmo tambem leva em consideracao o custo diferenciado de 
+ * cada uma das operacoes
  * 
  * @author Kevin L. Stern
  */
-public class DistanciaDeDamerauLevenshtein extends MoldeDeCalculadorDeDistanciaEntreStrings {
+public class DistanciaDeDamerauLevenshtein extends ModeloDeCalculadorDeDistanciaEntreStrings {
 	private Teclado teclado;
 
 	/**
-	 * Compute the Damerau-Levenshtein distance between the specified source
-	 * string and the specified target string.
+	 * Construtor da classe
 	 */
 	public DistanciaDeDamerauLevenshtein(Teclado teclado) {
 		this.teclado = teclado;
 	}
 
-
-	// calcula a distancia da primeira para a segunda palavra
+	/**
+	 *  calcula a distancia da primeira para a segunda palavra
+	 */
 	public int calcular (String primeiraString, String segundaString) {
 		double custoRemocao, custoInsercao, custoSubstituicao, custoTroca;
 		custoRemocao = teclado.getCustoInsercaoRemocao();
 		custoInsercao = custoRemocao;
 		custoTroca = teclado.getCustoTroca();
-		
+
 		//considera que todos os caracteres foram inseridos  
 		if (primeiraString.length() == 0) {
 			return (int) Math.abs(segundaString.length() * custoInsercao * 100);
@@ -66,19 +42,15 @@ public class DistanciaDeDamerauLevenshtein extends MoldeDeCalculadorDeDistanciaE
 		}
 
 		double[][] matrizDeDistancias = new double[primeiraString.length()][segundaString.length()];
-
 		Map<Character, Integer> indicesDaPrimeiraStringPorCaracter = new HashMap<Character, Integer>();
-
 		if (primeiraString.charAt(0) != segundaString.charAt(0)) {
 			matrizDeDistancias[0][0] = Math.min(teclado.getDistancia(segundaString.charAt(0), primeiraString.charAt(0)), custoRemocao + custoInsercao);
 		}
-
 		indicesDaPrimeiraStringPorCaracter.put(primeiraString.charAt(0), 0);
-
 		double distanciaRemocao;
 		double distanciaInsercao;
 		double distanciaSubstituicao;
-		
+
 		for (int i = 1; i < primeiraString.length(); i++) {
 			custoSubstituicao = teclado.getDistancia(primeiraString.charAt(i), segundaString.charAt(0));
 			distanciaRemocao = matrizDeDistancias[i - 1][0] + custoRemocao;
